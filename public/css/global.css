@@ -1,0 +1,217 @@
+*{
+    line-height: 1.2;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+p, em, blockquote{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 1.3rem;
+}
+
+.text-font *{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.inline{
+    display: inline;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.error_msg{
+    color: red;
+    font-size: 1rem;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+}
+
+.container{
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.centre-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+}
+.centre-container.centre-container--login_form{
+    min-height: 740px;
+}
+.centre-container.centre-container--signup_form{
+    min-height: 950px;
+}
+@media(max-width: 700px){
+    .centre-container.centre-container--login_form{
+        min-height: 640px;
+    }
+    .centre-container.centre-container--signup_form{
+        min-height: 850px;
+    }
+}
+.centre-container.centre-container__info_box{
+    padding: 0 20px;
+    min-height: 490px;
+}
+
+/* HEADER CONTENT BEGINS */
+#header{
+    position: relative;
+    height: 80px;
+    padding-left: 20px;
+    background-color: white;
+    box-shadow: inset 0 -15px 5px -10px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header__left-section{
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: flex-start;
+}
+.header__title{
+    font-size: 2.5rem;
+    margin-right: 10px;
+}
+.header__options{
+    list-style: none;
+    overflow: auto;
+    height: 100%;
+}
+.header__options_small{
+    display: none;
+    list-style: none;
+    overflow: auto;
+    height: 100%;
+}
+.header__options .fa-xmark{
+    display: none;
+}
+.header__left-section li{
+    float: left;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    cursor: pointer;
+    font-size: 1.3rem;
+}
+.header__left-section li:hover{
+    background-color: #04AA6D;
+    color: white;
+}
+.header__account_btn{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    cursor: pointer;
+    font-size: 1.3rem;
+}
+
+.header__account_btn:hover{
+    background-color: black;
+    color: white;
+}
+
+.header__left-section i[class*="fa-caret"]{
+    margin-left: 5px;
+}
+
+@media(max-width: 767px){
+    .header__options{
+        left: 0;
+        top: 80px;
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 0px;
+        background-color: #E7E9EB;
+        text-align: center;
+        overflow: hidden;
+    }
+    .header__options.header__options--expand_big{
+        height: 170px;
+    }
+    .header__options.header__options--expand_small{
+        height: 120px;
+    }
+    .header__options .fa-xmark{
+        top: 0;
+        right: 0;
+        display: block;
+        position: absolute;
+        padding: 10px 15px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    .header__options .fa-xmark:hover{
+        background-color: #CCCCCC;
+    }
+    .header__options_small{
+        display: block;
+    }
+    .header__left-section li{
+        font-size: 1.2rem;
+    }
+    .header__options li{
+        float: none;
+        display: block;
+        padding: 15px 0 15px 10px;
+        height: auto;
+        width: 90%;
+        margin: 0 auto;
+        background-color: #E7E9EB;
+    }
+    .header__options li:hover{
+        background-color: #CCCCCC;
+        color: black;
+    }
+    .header__options .header__first_option{
+        margin-top: 40px;
+    }
+    .header__account_btn{
+        font-size: 1.2rem;
+    }
+}
+
+@media(max-width: 575px){
+    p, em, blockquote{
+        font-size: 1.1rem;
+    }
+    .header__title{
+        font-size: 2rem;
+        width: 100px;
+        text-align: center;
+        margin-right: 0;
+    }
+    #header{
+        padding-left: 10px;
+    }
+}
+
+/* HEADER CONTENT ENDS */
