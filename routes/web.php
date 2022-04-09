@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CVController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,8 @@ Route::post('/create-account', [UserController::class, 'login'])->name('createAc
 Route::get('/create-cv', function(){
     return view('cv.create');
 })->name('create.cv')->middleware('auth');
+
+Route::post('/create-cv', [CVController::class, 'createCV'])->name('post.create.cv');
 
 Route::any('/{any}', function(){
     return view('welcome');

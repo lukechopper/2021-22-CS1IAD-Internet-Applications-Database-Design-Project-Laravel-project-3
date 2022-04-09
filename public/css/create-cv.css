@@ -87,8 +87,22 @@
 .form__add_new_item i{
     padding-right: 5px;
 }
+.form__submit{
+    margin-top: 12px;
+    padding: 10px 5px;
+    border: 0px none;
+    cursor: pointer;
+    background-color: #04AA6D;
+    color: white;
+    width: 100%;
+    border-radius: 20px;
+}
+.form__submit:hover{
+    background-color: #059862;
+}
 @media(max-width: 767px){
     .form__container{
         width: 100%;
     }
 }
+

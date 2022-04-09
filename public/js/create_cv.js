@@ -42,7 +42,7 @@ $(function(){
     let numOfKeyProgrammingLanguages = 0;
     $('#form__add_new_programming_language').click(function(){
         numOfKeyProgrammingLanguages++;
-        $('.form').append('<div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_'+numOfKeyProgrammingLanguages+'"> \
+        $('#form__begin_url_links_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_'+numOfKeyProgrammingLanguages+'"> \
         <label for="form_key_programming_language_'+numOfKeyProgrammingLanguages+'_name">Name:</label> \
         <input type="text" name="key_programming_language_'+numOfKeyProgrammingLanguages+'_name" id="form_key_programming_language_'+numOfKeyProgrammingLanguages+'_name" class="form__input"> \
     </div> \
@@ -58,6 +58,24 @@ $(function(){
             </div> \
             <div class="form__spacing_between_text_box_and_delete_icon"></div> \
             <i class="fa-solid fa-trash-can" delete_info="form_key_programming_language_'+numOfKeyProgrammingLanguages+'"></i> \
+        </div> \
+    </div>');
+        addDeleteEventListeners();
+    });
+
+    let numOfUrlLinks = 0;
+    $('#form__add_new_url_link').click(function(){
+        numOfUrlLinks++;
+        $('#form__submit_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_url_link_'+numOfUrlLinks+'"> \
+        <label for="form_url_link_'+numOfUrlLinks+'_title">Title:</label> \
+        <input type="text" name="url_link_'+numOfUrlLinks+'_title" id="form_url_link_'+numOfUrlLinks+'_title" class="form__input"> \
+    </div> \
+    <div class="form__container form__container--less_top_margin" delete_info="form_url_link_'+numOfUrlLinks+'"> \
+        <label for="form_url_link_'+numOfUrlLinks+'_url">URL:</label> \
+        <div class="form__text_box_then_delete_icon"> \
+            <input type="text" name="url_link_'+numOfUrlLinks+'_url" id="form_url_link_'+numOfUrlLinks+'_url" class="form__input"> \
+            <div class="form__spacing_between_text_box_and_delete_icon"></div> \
+            <i class="fa-solid fa-trash-can" delete_info="form_url_link_'+numOfUrlLinks+'"></i> \
         </div> \
     </div>');
         addDeleteEventListeners();
