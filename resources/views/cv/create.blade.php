@@ -37,7 +37,7 @@
             <div class="form__container form__container--full form__container--5px_top_margin">
                 <div class="form__add_new_item" id="form__add_new_education_item"><i class="fa-solid fa-circle-plus"></i>Add New Item</div>
             </div>
-            <div class="form__container form__container--less_top_margin" delete_info="form_education_0">
+            <div class="form__container form__container--less_top_margin" delete_info="form_education_0" open_info="form_education_0" >
                 <label for="form_education_0_name">Name:</label>
                 <input type="text" name="education_0_name" id="form_education_0_name" class="form__input">
             </div>

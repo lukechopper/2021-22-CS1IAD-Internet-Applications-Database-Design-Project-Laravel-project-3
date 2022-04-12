@@ -1,10 +1,58 @@
 $(function(){
 
+    let basicFormItemNames = ['form_first_name', 'form_last_name', 'form_profile'];
+    let formEducationNames = ['form_education_NUM_name', 'form_education_NUM_duration', 'form_education_NUM_description'];
+
+    function isBrowserDataEmpty(){
+        let isNotEmpty = false;
+        basicFormItemNames.forEach(function(item){
+            if(localStorage.getItem(item)){
+                isNotEmpty = true;
+            }
+        });
+        return isNotEmpty;
+    }
+
+    function browserSaveFormData(){
+        basicFormItemNames.forEach(function(item){
+            localStorage.setItem(item, $('#'+item).val());
+        });
+    }
+
+    function browserGetFormData(){
+        basicFormItemNames.forEach(function(item){
+            let savedData = localStorage.getItem(item);
+            $('#'+item).val(savedData);
+        });
+    }
+
+    function saveFormData(){
+        //ToDo: leave the forms hidden input alone
+        let numOfFormEducation = 0;
+        $('.form__container.form__container--less_top_margin').each(function(){
+            let typeOfContainer = $(this).attr('open_info');
+            let educationRegex = new RegExp('form_education_[0-9]+', 'i');
+            if(educationRegex.test(typeOfContainer)){
+                numOfFormEducation++;
+                localStorage.setItem('num_of_form_education', numOfFormEducation);
+            }
+        });
+        if(!numOfFormEducation){
+            localStorage.setItem('num_of_form_education', 'NAN');
+        }
+        browserSaveFormData();
+    }
+
+    if(isBrowserDataEmpty()){
+        browserGetFormData();
+    }
+
     function deleteEventListener(){
         let deleteInfo = $(this).attr('delete_info');
         $('.form__container.form__container--less_top_margin').each(function(){
             if(deleteInfo === $(this).attr('delete_info')){
                 $(this).remove();
+                saveFormData();
             }
         });
     }
@@ -18,7 +66,7 @@ $(function(){
     let numOfEducationItems = 0;
     $('#form__add_new_education_item').click(function(){
         numOfEducationItems++;
-        $('#form__begin_key_programming_languages_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_education_'+numOfEducationItems+'"> \
+        $('#form__begin_key_programming_languages_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_education_'+numOfEducationItems+'" open_info="form_education_'+numOfEducationItems+'"> \
         <label for="form_education_'+numOfEducationItems+'_name">Name:</label> \
         <input type="text" name="education_'+numOfEducationItems+'_name" id="form_education_'+numOfEducationItems+'_name" class="form__input"> \
     </div> \
@@ -37,6 +85,7 @@ $(function(){
         </div> \
     </div>');
         addDeleteEventListeners();
+        saveFormData();
     });
 
     let numOfKeyProgrammingLanguages = 0;
@@ -61,6 +110,7 @@ $(function(){
         </div> \
     </div>');
         addDeleteEventListeners();
+        saveFormData();
     });
 
     let numOfUrlLinks = 0;
@@ -79,5 +129,10 @@ $(function(){
         </div> \
     </div>');
         addDeleteEventListeners();
+        saveFormData();
+    });
+
+    $('.form').on('input', function(){
+        saveFormData();
     });
 });
