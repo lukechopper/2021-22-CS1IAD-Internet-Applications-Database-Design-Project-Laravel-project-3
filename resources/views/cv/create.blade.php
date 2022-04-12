@@ -63,7 +63,7 @@
             <div class="form__container form__container--full form__container--5px_top_margin">
                 <div class="form__add_new_item" id="form__add_new_programming_language"><i class="fa-solid fa-circle-plus"></i>Add New Item</div>
             </div>
-            <div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_0">
+            <div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_0" open_info="form_key_programming_language_0">
                 <label for="form_key_programming_language_0_name">Name:</label>
                 <input type="text" name="key_programming_language_0_name" id="form_key_programming_language_0_name" class="form__input">
             </div>
@@ -89,7 +89,7 @@
             <div class="form__container form__container--full form__container--5px_top_margin">
                 <div class="form__add_new_item" id="form__add_new_url_link"><i class="fa-solid fa-circle-plus"></i>Add New Item</div>
             </div>
-            <div class="form__container form__container--less_top_margin" delete_info="form_url_link_0">
+            <div class="form__container form__container--less_top_margin" delete_info="form_url_link_0" open_info="form_url_link_0">
                 <label for="form_url_link_0_title">Title:</label>
                 <input type="text" name="url_link_0_title" id="form_url_link_0_title" class="form__input">
             </div>
