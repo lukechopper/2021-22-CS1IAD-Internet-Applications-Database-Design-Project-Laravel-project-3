@@ -12,6 +12,9 @@
     justify-content: space-between;
     flex-wrap: wrap;
 }
+/* .form .error_msg{
+    font-size: 0.9rem;
+} */
 .form__container{
     margin-top: 20px;
     width: 49%;
@@ -100,9 +103,16 @@
 .form__submit:hover{
     background-color: #059862;
 }
-@media(max-width: 767px){
+
+.error_padding{
+    height: 19px;
+}
+
+@media(max-width: 1200px){
     .form__container{
         width: 100%;
     }
+    .error_padding{
+        height: 0px;
+    }
 }
-

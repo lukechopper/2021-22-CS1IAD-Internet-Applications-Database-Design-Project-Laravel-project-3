@@ -20,16 +20,20 @@
             </div>
             <div class="form__container">
                 <label for="form_first_name">First Name:</label>
-                @error('first_name')
-                <div class="error_msg">{{$message}}</div>
-                @enderror
+                @if (count($errors->get('last_name')) && !count($errors->get('first_name')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('first_name')))
+                <div class="error_msg">{{$errors->get('first_name')[0]}}</div>
+                @endif
                 <input type="text" name="first_name" id="form_first_name" class="form__input">
             </div>
             <div class="form__container">
                 <label for="form_last_name">Last Name:</label>
-                @error('last_name')
-                <div class="error_msg">{{$message}}</div>
-                @enderror
+                @if (count($errors->get('first_name')) && !count($errors->get('last_name')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('last_name')))
+                <div class="error_msg">{{$errors->get('last_name')[0]}}</div>
+                @endif
                 <input type="text" name="last_name" id="form_last_name" class="form__input">
             </div>
             <div class="form__container form__container--full">
@@ -48,16 +52,29 @@
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_education_0" open_info="form_education_0" >
                 <label for="form_education_0_name">Name:</label>
+                @if (count($errors->get('education_0_duration')) && !count($errors->get('education_0_name')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('education_0_name')))
+                <div class="error_msg">{{preg_replace("/The education [0-9]+ name/i",'This education name',$errors->get('education_0_name')[0])}}</div>
+                @endif
                 <input type="text" name="education_0_name" id="form_education_0_name" class="form__input">
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_education_0">
                 <label for="form_education_0_duration">Duration:</label>
+                @if (count($errors->get('education_0_name')) && !count($errors->get('education_0_duration')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('education_0_duration')))
+                <div class="error_msg">{{preg_replace("/The education [0-9]+ duration/i",'This education duration',$errors->get('education_0_duration')[0])}}</div>
+                @endif
                 <input type="text" name="education_0_duration" id="form_education_0_duration" class="form__input">
             </div>
             <div class="form__container form__container--full form__container--less_top_margin" delete_info="form_education_0">
                 <label for="form_education_0_description">Description:</label>
                 <div class="form__text_box_then_delete_icon">
                     <div class="form__textarea_container">
+                    @if (count($errors->get('education_0_description')))
+                    <div class="error_msg">{{preg_replace("/The education [0-9]+ description/i",'This education description',$errors->get('education_0_description')[0])}}</div>
+                    @endif
                     <textarea name="education_0_description" id="form_education_0_description" class="form__input form__input--smaller_textarea"></textarea>
                     </div>
                     <div class="form__spacing_between_text_box_and_delete_icon"></div>
@@ -74,10 +91,23 @@
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_0" open_info="form_key_programming_language_0">
                 <label for="form_key_programming_language_0_name">Name:</label>
+                @if(preg_match("/.*contain letters, numbers, dashes and underscores.*/i",count($errors->get('key_programming_language_0_duration')) ? $errors->get('key_programming_language_0_duration')[0] : ''))
+                <div class="error_padding" ></div>
+                @endif
+                @if (count($errors->get('key_programming_language_0_duration')) && !count($errors->get('key_programming_language_0_name')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('key_programming_language_0_name')))
+                <div class="error_msg">{{preg_replace("/The key programming language [0-9]+/i",'This language',$errors->get('key_programming_language_0_name')[0])}}</div>
+                @endif
                 <input type="text" name="key_programming_language_0_name" id="form_key_programming_language_0_name" class="form__input">
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_0">
                 <label for="form_key_programming_language_0_duration">Duration:</label>
+                @if (count($errors->get('key_programming_language_0_name')) && !count($errors->get('key_programming_language_0_duration')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('key_programming_language_0_duration')))
+                <div class="error_msg">{{preg_replace("/The key programming language [0-9]+/i",'This language',$errors->get('key_programming_language_0_duration')[0])}}</div>
+                @endif
                 <input type="text" name="key_programming_language_0_duration" id="form_key_programming_language_0_duration" class="form__input">
             </div>
             <div class="form__container form__container--full form__container--less_top_margin" delete_info="form_key_programming_language_0">
@@ -116,6 +146,13 @@
             </div>
         </form>
     </div>
+    <!-- LARAVEL SCRIPT -->
+    <script type="text/javascript">
+        let errorObj = { };
+        @if (count($errors->get('first_name')))
+        errorObj["first_name"] = "{{$errors->get('first_name')[0]}}";
+        @endif
+    </script>
     <!-- Create CV SCRIPT -->
     <script src="{{asset('public/js/create_cv.js')}}"></script>
 </body>

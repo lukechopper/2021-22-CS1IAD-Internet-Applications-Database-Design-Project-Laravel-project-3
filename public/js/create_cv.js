@@ -102,29 +102,6 @@ $(function(){
         </div> \
     </div>');
     }
-    /**
-     * Used in the 'isBrowserDataNotEmpty' function to do just that except that this function is for checking the dynamic parts of the form, in particular.
-     * @param {boolean} isAlreadyNotEmpty if we have already found out the truth – that the form is already not empty, so does contain content, then the rest of the function does not need to be executed.
-     * @param {Array<string>} namesArray the CV template names that this function will check, so it specifies which dynamic part of the form this function call will deal with in particular.
-     * @param {int} storedLength the number of input sections that exist within the particular dynamic part of the form that is being checked on a specific function call of this function – used to ensure a comprehensive check.
-     * @returns {boolean}
-     */
-    function isBrowserDataNotEmptyForDynamic(isAlreadyNotEmpty, namesArray, storedLength){
-        if(isAlreadyNotEmpty) return true;
-        let isDynamicNotEmpty = false;
-        if(!Array.isArray(namesArray)) return;
-        for(let i = 0; i <= storedLength; i++){
-            namesArray.forEach(function(name){
-                if(isDynamicNotEmpty) return;
-                let dynamicName = name.replace('NUM', i);
-                let storedVal = localStorage.getItem(dynamicName);
-                if(storedVal){
-                    isDynamicNotEmpty = true;
-                }
-            });
-        }
-        return isDynamicNotEmpty;
-    }
 
     /**
      * Will delete a dynamic form input given a first argument to specify the type that should be deleted and a second argument to specify the number of the type to be deleted.
@@ -139,14 +116,9 @@ $(function(){
             $('#'+dynamicName).closest('.form__container.form__container--less_top_margin').remove();
             localStorage.setItem(dynamicName, '');
         });
-        //TODO: get rid of this shit
-    //     $('#form__begin_key_programming_languages_section').before('<div class="form__container form__container--full"> \
-    //     <label for="form_profile">Profile:</label> \
-    //     @error(\'profile\') \
-    //     <div class="error_msg">{{$message}}</div> \
-    //     @enderror \
-    // </div>');
     }
+
+    console.log(errorObj);
 
     /**
      * used in the 'displayDynamicFormDataOnLoad' to do exactly that. Depending on the number of the given type of dynamic inputs that a particular call of this function is set to generate, as specified by the 'storedLength' parameter, this function will either add the input and then retrive its data from localStorage before setting it to be the value of the input that it just added, if the input is more than the first input of its kind in the DOM, or, if it is the first input of its kind in the DOM, then it will simply retrive this inputs value from localStorage and then set this retrived value to be its value as this input is already hard coded into the DOM.
@@ -191,31 +163,7 @@ $(function(){
             localStorage.setItem(dynamicName, goingToBeSavedValue);
         });
     }
-    /**
-     * Used on document load. If it finds out that the relevant localStorage items do exist, then it will start to do the necessary work to retrive them and add them to the dynamic form.
-     * @returns {boolean}
-     */
-    function isBrowserDataNotEmpty(){
-        let isNotEmpty = false;
-        basicFormItemNames.forEach(function(item){
-            if(localStorage.getItem(item)){
-                isNotEmpty = true;
-            }
-        });
-        let storedNumOfFormEducation = localStorage.getItem('num_of_form_education');
-        if(storedNumOfFormEducation && storedNumOfFormEducation !== 'NAN'){
-            isNotEmpty = isBrowserDataNotEmptyForDynamic(isNotEmpty, formEducationNames, parseInt(storedNumOfFormEducation));
-        }
-        let storedNumOfKeyProgrammingLanguages = localStorage.getItem('num_of_key_programming_language');
-        if(storedNumOfKeyProgrammingLanguages && storedNumOfKeyProgrammingLanguages !== 'NAN'){
-            isNotEmpty = isBrowserDataNotEmptyForDynamic(isNotEmpty, keyProgrammingLanguagesNames, parseInt(storedNumOfKeyProgrammingLanguages));
-        }
-        let storedNumOfUrlLinks = localStorage.getItem('num_of_url_links');
-        if(storedNumOfUrlLinks && storedNumOfUrlLinks !== 'NAN'){
-            isNotEmpty = isBrowserDataNotEmptyForDynamic(isNotEmpty, urlLinksNames, parseInt(storedNumOfUrlLinks));
-        }
-        return isNotEmpty;
-    }
+
     /**
      * Save the form data but only for the static form inputs at the top of the CV form.
      */
@@ -293,8 +241,7 @@ $(function(){
     }
 
     //Load form data on webpage load
-    if(isBrowserDataNotEmpty()){
-        console.log('??????');
+    //BEGIN OF SECTION THAT SHOULD HAPPEN ON DOCUMENT LOAD
         let storedNumOfFormEducation = localStorage.getItem('num_of_form_education');
         let storedNumOfKeyProgrammingLanguages = localStorage.getItem('num_of_key_programming_language');
         let storedNumOfUrlLinks = localStorage.getItem('num_of_url_links');
@@ -303,7 +250,7 @@ $(function(){
         displayDynamicFormDataOnLoad(storedNumOfUrlLinks, urlLinksNames, 'addDynamicUrlLink', setNumOfUrlLinks);
 
         browserGetFormData();
-    }
+    //END OF SECTION THAT SHOULD HAPPEN ON DOCUMENT LOAD
     /**
      * Returns the regex relevant to the dynamic input that is currently being deleted from where this function is being called – the 'deleteEventListener'. In addition to this, also sort out the numbering of the current number of the relevant dynamic input types since this is the function, in particular, where we will be aware of the specific type of dynamic input that is being deleted. But note however, not all of this is covered here, the numbering in relation to a special scenario where no dynamic form inputs are present on the CV form is covered in the 'saveFormData' function as well as the 'displayDynamicFormDataOnLoad' function.
      * @param {string} deleteInfo the 'delete_info' attribute of the dynamic input that is currently being deleted from where this function is being called – the 'deleteEventListener'.
