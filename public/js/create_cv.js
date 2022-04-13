@@ -15,6 +15,11 @@ $(function(){
     let educationRegex = new RegExp('form_education_[0-9]+', 'i');
     let keyProgrammingLanguageRegex = new RegExp('form_key_programming_language_[0-9]+', 'i');
 
+    /*
+    * These 3 variables count the number of dynamic input types that there is on the form for each individual type, hence why their is a variable for each type of dynamic input to make 3 in total. They are used for the numbering of the inputs.
+    */
+    let numOfEducationItems = 0;
+
     /**
      * Will add a new dynamic education item to the CV form in the relevant place
      * @param {string|num} deleteInfoNum used to number the dynamic input. So, if this is the first dynamic input of its kind, then this number should be 0, but it should be 1 if it is the second one being added, and so on.
@@ -221,6 +226,7 @@ $(function(){
         });
         if(!numOfFormEducation){
             localStorage.setItem('num_of_form_education', 'NAN');
+            numOfEducationItems = -1;
         }
         if(!numOfKeyProgrammingLanguages){
             localStorage.setItem('num_of_key_programming_language', 'NAN');
@@ -239,6 +245,7 @@ $(function(){
         if(numOfDynamicFormItems){
             if(numOfDynamicFormItems === 'NAN'){
                 deleteDynamicFormInput(correctNamesArray, '0');
+                numOfEducationItems = -1;
             }else{
                 transferStoredDataIntoDynamicFormInput(correctNamesArray, parseInt(numOfDynamicFormItems), addDynamicItemFunctionName)
             }
@@ -254,9 +261,30 @@ $(function(){
 
         browserGetFormData();
     }
-
+    /**
+     * Returns the regex relevant to the dynamic input that is currently being deleted from where this function is being called – the 'deleteEventListener'. In addition to this, also sort out the numbering of the current number of the relevant dynamic input types since this is the function, in particular, where we will be aware of the specific type of dynamic input that is being deleted. But note however, not all of this is covered here, the numbering in relation to a special scenario where no dynamic form inputs are present on the CV form is covered in the 'saveFormData' function as well as the 'displayDynamicFormDataOnLoad' function.
+     * @param {string} deleteInfo the 'delete_info' attribute of the dynamic input that is currently being deleted from where this function is being called – the 'deleteEventListener'.
+     * @returns {RegExp}
+     */
     function whichTypeOfDynamicInputIsBeingDeleted(deleteInfo){
-
+        if(educationRegex.test(deleteInfo)){
+            if(numOfEducationItems > 0){
+                numOfEducationItems--;
+            }
+            return educationRegex;
+        }else if(keyProgrammingLanguageRegex.test(deleteInfo)){
+            return keyProgrammingLanguageRegex;
+        }
+    }
+    /**
+     * The function that will take an attribute from an element related to a dynamic form input, pick out the number from this attribute, and then replace it with the number supplied as this functions third parameter.
+     * @param {JQuery} jQueryFormInput The actual element, in JQuery form, that will have one of its attributes changed in this function.
+     * @param {string} attributeToChange The attribute name that will be changed.
+     * @param {int} newNumber The new number that will replace the old number in the former attribute value.
+     */
+    function updateTheRelevantNumberInAttributesOfDynamicFormInput(jQueryFormInput, attributeToChange, newNumber){
+        let newAttributeValue = jQueryFormInput.attr(attributeToChange).replace(/[0-9]+/i, newNumber);
+        jQueryFormInput.attr(attributeToChange, newAttributeValue);
     }
 
     /**
@@ -264,31 +292,58 @@ $(function(){
      */
     function deleteEventListener(){
         let deleteInfo = $(this).attr('delete_info');
-        // let numOfDeleteInfo = deleteInfo.match(/[0-9]+/i)[0];
-        // if(educationRegex.test(deleteInfo)){
+        let numOfDeleteInfo = parseInt(deleteInfo.match(/[0-9]+/i)[0]);
+        let regexOfDynamicInputBeingDeleted = whichTypeOfDynamicInputIsBeingDeleted(deleteInfo);
 
-        // }
         $('.form__container.form__container--less_top_margin').each(function(){
-            if(deleteInfo === $(this).attr('delete_info')){
+            let thisDeleteInfo = $(this).attr('delete_info');
+
+            if(deleteInfo === thisDeleteInfo){
                 $(this).remove();
-                saveFormData();
             }
         });
+        //If the 'delete_info' of the dynamic input container that is being looped through here is not matching the dynamic input that should be deleted but it is of the same type of that input and it has a higher number than that input, then we need to decrease its value to reflect the fact that the dynamic input below it has been deleted.
+        $('.form__container.form__container--less_top_margin').each(function(){
+            let thisDeleteInfo = $(this).attr('delete_info');
+            let numOfThisDeleteInfo = parseInt(thisDeleteInfo.match(/[0-9]+/i)[0]);
+
+            if(regexOfDynamicInputBeingDeleted.test(thisDeleteInfo) && numOfThisDeleteInfo > numOfDeleteInfo){
+                if($(this).attr('open_info')){
+                    updateTheRelevantNumberInAttributesOfDynamicFormInput($(this), 'open_info', numOfThisDeleteInfo - 1);
+                }
+                updateTheRelevantNumberInAttributesOfDynamicFormInput($(this), 'delete_info', numOfThisDeleteInfo - 1);
+
+                let currentJQueryFormInput = $(this).find('.form__input');
+                updateTheRelevantNumberInAttributesOfDynamicFormInput(currentJQueryFormInput, 'name', numOfThisDeleteInfo - 1);
+                updateTheRelevantNumberInAttributesOfDynamicFormInput(currentJQueryFormInput, 'id', numOfThisDeleteInfo - 1);
+
+                let possibleJQueryDeleteIconEle = $(this).find('.fa-solid.fa-trash-can');
+                if(possibleJQueryDeleteIconEle.length){
+                    updateTheRelevantNumberInAttributesOfDynamicFormInput(possibleJQueryDeleteIconEle, 'delete_info', numOfThisDeleteInfo - 1);
+                }
+
+                let jQueryLabelIconEle = $(this).find('label');
+                updateTheRelevantNumberInAttributesOfDynamicFormInput(jQueryLabelIconEle, 'for', numOfThisDeleteInfo - 1);
+            }
+        });
+
+        saveFormData();
     }
     /**
      * Actually adds the delete event listener to the relevant delete icon of every dynamic form input within the form. Is called whenever a new input is added but also on document load as well.
      */
     function addDeleteEventListeners(){
         $('.fa-solid.fa-trash-can').each(function(){
-            $(this).click(deleteEventListener);
+            $(this).off().click(deleteEventListener);
         });
     } addDeleteEventListeners();
 
     /*
     The next 3 callback functions are all 'click' event handlers that allow a new dynamic form input to be added to their particular section when the relevant icon is clicked on – hence why there are 3 of them.
     */
-
-    let numOfEducationItems = 0;
+    /**
+     * @var {int} numOfEducationItems The number of dynamic education inputs that there is on the CV form.
+     */
     $('#form__add_new_education_item').click(function(){
         numOfEducationItems++;
         addDynamicEducationItem(numOfEducationItems);
