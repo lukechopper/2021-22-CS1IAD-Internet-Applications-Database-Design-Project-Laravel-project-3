@@ -20,14 +20,23 @@
             </div>
             <div class="form__container">
                 <label for="form_first_name">First Name:</label>
+                @error('first_name')
+                <div class="error_msg">{{$message}}</div>
+                @enderror
                 <input type="text" name="first_name" id="form_first_name" class="form__input">
             </div>
             <div class="form__container">
                 <label for="form_last_name">Last Name:</label>
+                @error('last_name')
+                <div class="error_msg">{{$message}}</div>
+                @enderror
                 <input type="text" name="last_name" id="form_last_name" class="form__input">
             </div>
             <div class="form__container form__container--full">
                 <label for="form_profile">Profile:</label>
+                @error('profile')
+                <div class="error_msg">{{$message}}</div>
+                @enderror
             </div>
             <textarea name="profile" id="form_profile" class="form__input form__input--textarea"></textarea>
             <!-- OPEN EDUCATION SECTION -->

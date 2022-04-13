@@ -12,12 +12,18 @@ class CVController extends Controller
         if(!$request->isMethod('post')){
             return redirect()->route('home');
         }
-        $educationNameValidationArray = array();
-        foreach($request->request as $key => $value){
-            if(preg_match("/education_[0-9]+_name/i", $key)){
-                $educationNameValidationArray[$key] = $value;
-            }
-        }
-        dd($educationNameValidationArray);
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'profile' => 'required'
+        ]);
+        dd('Success');
+        // $educationNameValidationArray = array();
+        // foreach($request->request as $key => $value){
+        //     if(preg_match("/education_[0-9]+_name/i", $key)){
+        //         $educationNameValidationArray[$key] = $value;
+        //     }
+        // }
+        // dd($educationNameValidationArray);
     }
 }

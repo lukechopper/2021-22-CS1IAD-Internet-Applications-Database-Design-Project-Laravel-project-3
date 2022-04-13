@@ -139,6 +139,13 @@ $(function(){
             $('#'+dynamicName).closest('.form__container.form__container--less_top_margin').remove();
             localStorage.setItem(dynamicName, '');
         });
+        //TODO: get rid of this shit
+    //     $('#form__begin_key_programming_languages_section').before('<div class="form__container form__container--full"> \
+    //     <label for="form_profile">Profile:</label> \
+    //     @error(\'profile\') \
+    //     <div class="error_msg">{{$message}}</div> \
+    //     @enderror \
+    // </div>');
     }
 
     /**
@@ -287,6 +294,7 @@ $(function(){
 
     //Load form data on webpage load
     if(isBrowserDataNotEmpty()){
+        console.log('??????');
         let storedNumOfFormEducation = localStorage.getItem('num_of_form_education');
         let storedNumOfKeyProgrammingLanguages = localStorage.getItem('num_of_key_programming_language');
         let storedNumOfUrlLinks = localStorage.getItem('num_of_url_links');
