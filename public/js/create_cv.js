@@ -14,11 +14,27 @@ $(function(){
      */
     let educationRegex = new RegExp('form_education_[0-9]+', 'i');
     let keyProgrammingLanguageRegex = new RegExp('form_key_programming_language_[0-9]+', 'i');
+    let urlLinksRegex = new RegExp('form_url_link_[0-9]+', 'i');
 
     /*
     * These 3 variables count the number of dynamic input types that there is on the form for each individual type, hence why their is a variable for each type of dynamic input to make 3 in total. They are used for the numbering of the inputs.
     */
     let numOfEducationItems = 0;
+    let numOfKeyProgrammingLanguages = 0;
+    let numOfUrlLinks = 0;
+    /**
+     * Acompanying each of these global variables are their own functions to set their value to something new.
+     * @param {int} newVal
+     */
+    function setNumOfEducationItems(newVal){
+        numOfEducationItems = newVal;
+    }
+    function setNumOfKeyProgrammingLanguages(newVal){
+        numOfKeyProgrammingLanguages = newVal;
+    }
+    function setNumOfUrlLinks(newVal){
+        numOfUrlLinks = newVal;
+    }
 
     /**
      * Will add a new dynamic education item to the CV form in the relevant place
@@ -141,6 +157,8 @@ $(function(){
                     addDynamicEducationItem(i);
                 }else if(addDynamicItemFunctionName === 'addDynamicKeyProgrammingLanguage'){
                     addDynamicKeyProgrammingLanguage(i);
+                }else if(addDynamicItemFunctionName === 'addDynamicUrlLink'){
+                    addDynamicUrlLink(i);
                 }
             }
             namesArray.forEach(function(name){
@@ -178,12 +196,16 @@ $(function(){
             }
         });
         let storedNumOfFormEducation = localStorage.getItem('num_of_form_education');
-        if(storedNumOfFormEducation){
+        if(storedNumOfFormEducation && storedNumOfFormEducation !== 'NAN'){
             isNotEmpty = isBrowserDataNotEmptyForDynamic(isNotEmpty, formEducationNames, parseInt(storedNumOfFormEducation));
         }
         let storedNumOfKeyProgrammingLanguages = localStorage.getItem('num_of_key_programming_language');
-        if(storedNumOfKeyProgrammingLanguages){
+        if(storedNumOfKeyProgrammingLanguages && storedNumOfKeyProgrammingLanguages !== 'NAN'){
             isNotEmpty = isBrowserDataNotEmptyForDynamic(isNotEmpty, keyProgrammingLanguagesNames, parseInt(storedNumOfKeyProgrammingLanguages));
+        }
+        let storedNumOfUrlLinks = localStorage.getItem('num_of_url_links');
+        if(storedNumOfUrlLinks && storedNumOfUrlLinks !== 'NAN'){
+            isNotEmpty = isBrowserDataNotEmptyForDynamic(isNotEmpty, urlLinksNames, parseInt(storedNumOfUrlLinks));
         }
         return isNotEmpty;
     }
@@ -211,7 +233,8 @@ $(function(){
      */
     function saveFormData(){
         let numOfFormEducation = 0;
-        let numOfKeyProgrammingLanguages = 0;
+        let numOfFormProgrammingLanguages = 0;
+        let numOfFormUrlLinks = 0;
         $('.form__container.form__container--less_top_margin').each(function(){
             let typeOfContainer = $(this).attr('open_info');
             if(educationRegex.test(typeOfContainer)){
@@ -219,17 +242,26 @@ $(function(){
                 saveDynamicFormInput(formEducationNames, numOfFormEducation);
                 numOfFormEducation++;
             }else if(keyProgrammingLanguageRegex.test(typeOfContainer)){
-                localStorage.setItem('num_of_key_programming_language', numOfKeyProgrammingLanguages);
-                saveDynamicFormInput(keyProgrammingLanguagesNames, numOfKeyProgrammingLanguages);
-                numOfKeyProgrammingLanguages++;
+                localStorage.setItem('num_of_key_programming_language', numOfFormProgrammingLanguages);
+                saveDynamicFormInput(keyProgrammingLanguagesNames, numOfFormProgrammingLanguages);
+                numOfFormProgrammingLanguages++;
+            }else if(urlLinksRegex.test(typeOfContainer)){
+                localStorage.setItem('num_of_url_links', numOfFormUrlLinks);
+                saveDynamicFormInput(urlLinksNames, numOfFormUrlLinks);
+                numOfFormUrlLinks++;
             }
         });
         if(!numOfFormEducation){
             localStorage.setItem('num_of_form_education', 'NAN');
-            numOfEducationItems = -1;
+            setNumOfEducationItems(-1);
         }
-        if(!numOfKeyProgrammingLanguages){
+        if(!numOfFormProgrammingLanguages){
             localStorage.setItem('num_of_key_programming_language', 'NAN');
+            setNumOfKeyProgrammingLanguages(-1);
+        }
+        if(!numOfFormUrlLinks){
+            localStorage.setItem('num_of_url_links', 'NAN');
+            setNumOfUrlLinks(-1);
         }
         browserSaveFormData();
     }
@@ -238,14 +270,15 @@ $(function(){
      * @param {string} numOfDynamicFormItems the number of a particular form input type, as determined by the following parameter, 'correctNamesArray', that this function should add.
      * @param {Array<string>} correctNamesArray the CV template names that this function will check, so it specifies which dynamic part of the form this function call will deal with in particular.
      * @param {string} addDynamicItemFunctionName used so that it can be passed into the 'transferStoredDataIntoDynamicFormInput' function. Read its description there for more info.
+     * @param {function} setNewNumOfItemsCallbackFunction the callback function that will set the relevant number of items to be -1 if it is the case that the data in localStorage is informing us that there are none of the current dynamic input type should be on the form at the moment.
      * @returns void
      */
-    function displayDynamicFormDataOnLoad(numOfDynamicFormItems, correctNamesArray, addDynamicItemFunctionName){
+    function displayDynamicFormDataOnLoad(numOfDynamicFormItems, correctNamesArray, addDynamicItemFunctionName, setNewNumOfItemsCallbackFunction){
         if(!Array.isArray(correctNamesArray)) return;
         if(numOfDynamicFormItems){
             if(numOfDynamicFormItems === 'NAN'){
                 deleteDynamicFormInput(correctNamesArray, '0');
-                numOfEducationItems = -1;
+                setNewNumOfItemsCallbackFunction(-1);
             }else{
                 transferStoredDataIntoDynamicFormInput(correctNamesArray, parseInt(numOfDynamicFormItems), addDynamicItemFunctionName)
             }
@@ -256,8 +289,10 @@ $(function(){
     if(isBrowserDataNotEmpty()){
         let storedNumOfFormEducation = localStorage.getItem('num_of_form_education');
         let storedNumOfKeyProgrammingLanguages = localStorage.getItem('num_of_key_programming_language');
-        displayDynamicFormDataOnLoad(storedNumOfFormEducation, formEducationNames, 'addDynamicEducationItem');
-        displayDynamicFormDataOnLoad(storedNumOfKeyProgrammingLanguages, keyProgrammingLanguagesNames, 'addDynamicKeyProgrammingLanguage');
+        let storedNumOfUrlLinks = localStorage.getItem('num_of_url_links');
+        displayDynamicFormDataOnLoad(storedNumOfFormEducation, formEducationNames, 'addDynamicEducationItem', setNumOfEducationItems);
+        displayDynamicFormDataOnLoad(storedNumOfKeyProgrammingLanguages, keyProgrammingLanguagesNames, 'addDynamicKeyProgrammingLanguage', setNumOfKeyProgrammingLanguages);
+        displayDynamicFormDataOnLoad(storedNumOfUrlLinks, urlLinksNames, 'addDynamicUrlLink', setNumOfUrlLinks);
 
         browserGetFormData();
     }
@@ -273,7 +308,15 @@ $(function(){
             }
             return educationRegex;
         }else if(keyProgrammingLanguageRegex.test(deleteInfo)){
+            if(numOfKeyProgrammingLanguages > 0){
+                numOfKeyProgrammingLanguages--;
+            }
             return keyProgrammingLanguageRegex;
+        }else if(urlLinksRegex.test(deleteInfo)){
+            if(numOfUrlLinks > 0){
+                numOfUrlLinks--;
+            }
+            return urlLinksRegex;
         }
     }
     /**
@@ -342,7 +385,7 @@ $(function(){
     The next 3 callback functions are all 'click' event handlers that allow a new dynamic form input to be added to their particular section when the relevant icon is clicked on – hence why there are 3 of them.
     */
     /**
-     * @var {int} numOfEducationItems The number of dynamic education inputs that there is on the CV form.
+     * @var {int} numOfEducationItems The number of dynamic education inputs that there is on the CV form – used for numbering the dynamic inputs so that they can be stored properly.
      */
     $('#form__add_new_education_item').click(function(){
         numOfEducationItems++;
@@ -351,7 +394,9 @@ $(function(){
         saveFormData();
     });
 
-    let numOfKeyProgrammingLanguages = 0;
+    /**
+     * @var {int} numOfKeyProgrammingLanguages The number of dynamic key programming language inputs that there is on the CV form – used for numbering the dynamic inputs so that they can be stored properly.
+     */
     $('#form__add_new_programming_language').click(function(){
         numOfKeyProgrammingLanguages++;
         addDynamicKeyProgrammingLanguage(numOfKeyProgrammingLanguages);
@@ -359,7 +404,7 @@ $(function(){
         saveFormData();
     });
 
-    let numOfUrlLinks = 0;
+
     $('#form__add_new_url_link').click(function(){
         numOfUrlLinks++;
         addDynamicUrlLink(numOfUrlLinks);
