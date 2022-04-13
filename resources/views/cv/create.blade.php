@@ -52,6 +52,9 @@
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_education_0" open_info="form_education_0" >
                 <label for="form_education_0_name">Name:</label>
+                @if(preg_match("/.*contain letters, numbers, dashes and underscores.*/i",count($errors->get('education_0_duration')) ? $errors->get('education_0_duration')[0] : ''))
+                <div class="error_padding" ></div>
+                @endif
                 @if (count($errors->get('education_0_duration')) && !count($errors->get('education_0_name')))
                 <div class="error_padding" ></div>
                 @elseif (count($errors->get('education_0_name')))
@@ -114,6 +117,9 @@
                 <label for="form_key_programming_language_0_description">Description:</label>
                 <div class="form__text_box_then_delete_icon">
                     <div class="form__textarea_container">
+                    @if (count($errors->get('key_programming_language_0_description')))
+                    <div class="error_msg">{{preg_replace("/The key programming language [0-9]+/i",'This language',$errors->get('key_programming_language_0_description')[0])}}</div>
+                    @endif
                     <textarea name="key_programming_language_0_description" id="form_key_programming_language_0_description" class="form__input form__input--smaller_textarea"></textarea>
                     </div>
                     <div class="form__spacing_between_text_box_and_delete_icon"></div>
@@ -130,10 +136,20 @@
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_url_link_0" open_info="form_url_link_0">
                 <label for="form_url_link_0_title">Title:</label>
+                @if (count($errors->get('url_link_0_url')) && !count($errors->get('url_link_0_title')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('url_link_0_title')))
+                <div class="error_msg">{{preg_replace("/The url link [0-9]+/i",'This url link',$errors->get('url_link_0_title')[0])}}</div>
+                @endif
                 <input type="text" name="url_link_0_title" id="form_url_link_0_title" class="form__input">
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="form_url_link_0">
                 <label for="form_url_link_0_url">URL:</label>
+                @if (count($errors->get('url_link_0_title')) && !count($errors->get('url_link_0_url')))
+                <div class="error_padding" ></div>
+                @elseif (count($errors->get('url_link_0_url')))
+                <div class="error_msg">{{preg_replace("/The url link [0-9]+/i",'This url link',$errors->get('url_link_0_url')[0])}}</div>
+                @endif
                 <div class="form__text_box_then_delete_icon">
                     <input type="text" name="url_link_0_url" id="form_url_link_0_url" class="form__input">
                     <div class="form__spacing_between_text_box_and_delete_icon"></div>
@@ -152,6 +168,11 @@
         @if (count($errors->get('first_name')))
         errorObj["first_name"] = "{{$errors->get('first_name')[0]}}";
         @endif
+
+        @for($i=0;$i<count($errors->all());$i++)
+        errorObj["{{$errors->keys()[$i]}}"] = "{{$errors->all()[$i]}}";
+        @endfor
+
     </script>
     <!-- Create CV SCRIPT -->
     <script src="{{asset('public/js/create_cv.js')}}"></script>
