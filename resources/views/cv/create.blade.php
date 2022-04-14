@@ -17,6 +17,11 @@
             @csrf
             <div class="form__container form__container--full form__container--top">
                 <h1 class="form__header">Create CV</h1>
+                @if(session('error'))
+                    <div class="error_msg">{{session('error')}}</div>
+                @elseif(session('success'))
+                    <div class="success_msg">{{session('success')}}</div>
+                @endif
             </div>
             <div class="form__container">
                 <label for="form_first_name">First Name:</label>

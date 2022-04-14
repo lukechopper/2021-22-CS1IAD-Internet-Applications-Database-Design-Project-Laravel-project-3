@@ -33,6 +33,11 @@ a{
     font-size: 1rem;
 }
 
+.success_msg{
+    color: #04AA6D;
+    font-size: 1rem;
+}
+
 button, input, select, textarea {
     font-family: inherit;
     font-size: 100%;

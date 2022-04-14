@@ -37,22 +37,67 @@ $(function(){
     }
 
     /**
+     * Same as the 'handleNameError2ColumnInput' except that this function will generate the error message for an input that takes up the full width of the form and not one that shares a row with another input when the form is fully expanded. So, go to the 'handleNameError2ColumnInput' for more information.
+     * @param {string} inputName the key, within the errorObj function, of the input that is the focus of this function.
+     * @param {RegExp} replaceRegex regexp of what to look for within the error message so that it can be replaced.
+     * @param {string} whatToReplaceWithRegex what to replace the searched for regular expression, within the error message, with.
+     * @returns {string}
+     */
+    function handleNameError1ColumnInput(inputName, replaceRegex, whatToReplaceWithRegex){
+        let returnString = '';
+        if(errorObj[inputName]){
+            returnString = '<div class="error_msg" >' +errorObj[inputName].replace(replaceRegex, whatToReplaceWithRegex)+ '</div>';
+        }
+
+        return returnString;
+    }
+
+    /**
+     * Used in the coming generate dynamic input functions. Will return a string that can be inserted, into the correct place, in the string that will add the new input section to the form for a specific input in this input section – in this case an input that, on expanded view, sits adjacent to another input on its size as an input that takes up the full width of the form is covered in another function.
+     * @param {string} adjacentInputName the key, within the errorObj function, of the input horizontally to the main input that is the focus of this function.
+     * @param {string} inputName the key, within the errorObj function, of the input that is the focus of this function.
+     * @param {RegExp} replaceRegex regexp of what to look for within the error message so that it can be replaced.
+     * @param {string} whatToReplaceWithRegex what to replace the searched for regular expression, within the error message, with.
+     * @param {boolean} needsDoublePadding whether or not this error input may need extra padding because the error message of the input adjacent to it may have an error message that spans more than one line.
+     * @returns {string}
+     */
+    function handleNameError2ColumnInput(adjacentInputName, inputName, replaceRegex, whatToReplaceWithRegex, needsDoublePadding){
+        let returnString = '';
+        if(errorObj[adjacentInputName] && !errorObj[inputName]){
+            returnString = '<div class="error_padding" ></div>';
+        }else if(errorObj[inputName]){
+            returnString = '<div class="error_msg" >' +errorObj[inputName].replace(replaceRegex, whatToReplaceWithRegex)+ '</div>';
+        }
+        if(needsDoublePadding && errorObj[adjacentInputName]){
+            let doublePaddingRegex = new RegExp('.*contain letters, numbers, dashes and underscores.*', 'i');
+            if(doublePaddingRegex.test(errorObj[adjacentInputName])){
+                returnString = '<div class="error_padding" ></div><div class="error_padding" ></div>';
+            }
+        }
+        return returnString;
+    }
+
+    /**
      * Will add a new dynamic education item to the CV form in the relevant place
      * @param {string|num} deleteInfoNum used to number the dynamic input. So, if this is the first dynamic input of its kind, then this number should be 0, but it should be 1 if it is the second one being added, and so on.
      */
     function addDynamicEducationItem(deleteInfoNum){
+        let educationNameError = handleNameError2ColumnInput('education_'+deleteInfoNum+'_duration', 'education_'+deleteInfoNum+'_name', /The education [0-9]+ name/i, 'This education name', true);
+        let educationDurationError = handleNameError2ColumnInput('education_'+deleteInfoNum+'_name', 'education_'+deleteInfoNum+'_duration', /The education [0-9]+ duration/i, 'This education duration', false);
+        let educationDescriptionError = handleNameError1ColumnInput('education_'+deleteInfoNum+'_description', /The education [0-9]+ description/i, 'This education description');
+
         $('#form__begin_key_programming_languages_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_education_'+deleteInfoNum+'" open_info="form_education_'+deleteInfoNum+'"> \
-        <label for="form_education_'+deleteInfoNum+'_name">Name:</label> \
+        <label for="form_education_'+deleteInfoNum+'_name">Name:</label> '+educationNameError+' \
         <input type="text" name="education_'+deleteInfoNum+'_name" id="form_education_'+deleteInfoNum+'_name" class="form__input"> \
     </div> \
     <div class="form__container form__container--less_top_margin" delete_info="form_education_'+deleteInfoNum+'"> \
-        <label for="form_education_'+deleteInfoNum+'_duration">Duration:</label> \
+        <label for="form_education_'+deleteInfoNum+'_duration">Duration:</label> '+educationDurationError+' \
         <input type="text" name="education_'+deleteInfoNum+'_duration" id="form_education_'+deleteInfoNum+'_duration" class="form__input"> \
     </div> \
     <div class="form__container form__container--full form__container--less_top_margin" delete_info="form_education_'+deleteInfoNum+'"> \
         <label for="form_education_'+deleteInfoNum+'_description">Description:</label> \
         <div class="form__text_box_then_delete_icon"> \
-            <div class="form__textarea_container"> \
+            <div class="form__textarea_container"> '+educationDescriptionError+' \
             <textarea name="education_'+deleteInfoNum+'_description" id="form_education_'+deleteInfoNum+'_description" class="form__input form__input--smaller_textarea"></textarea> \
             </div> \
             <div class="form__spacing_between_text_box_and_delete_icon"></div> \
@@ -65,18 +110,22 @@ $(function(){
      * @param {string|num} deleteInfoNum used to number the dynamic input. So, if this is the first dynamic input of its kind, then this number should be 0, but it should be 1 if it is the second one being added, and so on.
      */
     function addDynamicKeyProgrammingLanguage(deleteInfoNum){
+        let keyProgrammingNameError = handleNameError2ColumnInput('key_programming_language_'+deleteInfoNum+'_duration', 'key_programming_language_'+deleteInfoNum+'_name', /The key programming language [0-9]+/i, 'This language', true);
+        let keyProgrammingDurationError = handleNameError2ColumnInput('key_programming_language_'+deleteInfoNum+'_name', 'key_programming_language_'+deleteInfoNum+'_duration', /The key programming language [0-9]+/i, 'This language', false);
+        let keyProgrammingDescriptionError = handleNameError1ColumnInput('key_programming_language_'+deleteInfoNum+'_description', /The key programming language [0-9]+/i, 'This language');
+
         $('#form__begin_url_links_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_'+deleteInfoNum+'" open_info="form_key_programming_language_'+deleteInfoNum+'"> \
-        <label for="form_key_programming_language_'+deleteInfoNum+'_name">Name:</label> \
+        <label for="form_key_programming_language_'+deleteInfoNum+'_name">Name:</label> '+keyProgrammingNameError+' \
         <input type="text" name="key_programming_language_'+deleteInfoNum+'_name" id="form_key_programming_language_'+deleteInfoNum+'_name" class="form__input"> \
     </div> \
     <div class="form__container form__container--less_top_margin" delete_info="form_key_programming_language_'+deleteInfoNum+'"> \
-        <label for="form_key_programming_language_'+deleteInfoNum+'_duration">Duration:</label> \
+        <label for="form_key_programming_language_'+deleteInfoNum+'_duration">Duration:</label> '+keyProgrammingDurationError+' \
         <input type="text" name="key_programming_language_'+deleteInfoNum+'_duration" id="form_key_programming_language_'+deleteInfoNum+'_duration" class="form__input"> \
     </div> \
     <div class="form__container form__container--full form__container--less_top_margin" delete_info="form_key_programming_language_'+deleteInfoNum+'"> \
         <label for="form_key_programming_language_'+deleteInfoNum+'_description">Description:</label> \
         <div class="form__text_box_then_delete_icon"> \
-            <div class="form__textarea_container"> \
+            <div class="form__textarea_container"> '+keyProgrammingDescriptionError+' \
             <textarea name="key_programming_language_'+deleteInfoNum+'_description" id="form_key_programming_language_'+deleteInfoNum+'_description" class="form__input form__input--smaller_textarea"></textarea> \
             </div> \
             <div class="form__spacing_between_text_box_and_delete_icon"></div> \
@@ -89,12 +138,15 @@ $(function(){
      * @param {string|num} deleteInfoNum used to number the dynamic input. So, if this is the first dynamic input of its kind, then this number should be 0, but it should be 1 if it is the second one being added, and so on.
      */
     function addDynamicUrlLink(deleteInfoNum){
+        let urlLinksTitleError = handleNameError2ColumnInput('url_link_'+deleteInfoNum+'_url', 'url_link_'+deleteInfoNum+'_title', /The url link [0-9]+/i, 'This url link', false);
+        let urlLinksUrlError = handleNameError2ColumnInput('url_link_'+deleteInfoNum+'_title', 'url_link_'+deleteInfoNum+'_url', /The url link [0-9]+/i, 'This url link', false);
+
         $('#form__submit_section').before('<div class="form__container form__container--less_top_margin" delete_info="form_url_link_'+deleteInfoNum+'" open_info="form_url_link_'+deleteInfoNum+'"> \
-        <label for="form_url_link_'+deleteInfoNum+'_title">Title:</label> \
+        <label for="form_url_link_'+deleteInfoNum+'_title">Title:</label> '+urlLinksTitleError+' \
         <input type="text" name="url_link_'+deleteInfoNum+'_title" id="form_url_link_'+deleteInfoNum+'_title" class="form__input"> \
     </div> \
     <div class="form__container form__container--less_top_margin" delete_info="form_url_link_'+deleteInfoNum+'"> \
-        <label for="form_url_link_'+deleteInfoNum+'_url">URL:</label> \
+        <label for="form_url_link_'+deleteInfoNum+'_url">URL:</label> '+urlLinksUrlError+' \
         <div class="form__text_box_then_delete_icon"> \
             <input type="text" name="url_link_'+deleteInfoNum+'_url" id="form_url_link_'+deleteInfoNum+'_url" class="form__input"> \
             <div class="form__spacing_between_text_box_and_delete_icon"></div> \
