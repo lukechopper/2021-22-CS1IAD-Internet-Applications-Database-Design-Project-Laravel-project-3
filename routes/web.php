@@ -33,11 +33,11 @@ Route::post('/register', [UserController::class, 'signup'])->name('register');
 
 Route::post('/create-account', [UserController::class, 'login'])->name('createAccount');
 
-Route::get('/create-cv', function(){
-    return view('cv.create');
-})->name('create.cv')->middleware('auth');
+Route::get('/create-cv', [CVController::class, 'tryToAccessCreateCV'])->name('create.cv')->middleware('auth');
 
 Route::post('/create-cv', [CVController::class, 'createCV'])->name('post.create.cv');
+
+Route::get('/update-cv', [CVController::class, 'accessUpdateCV'])->name('update.cv')->middleware('auth');
 
 Route::any('/{any}', function(){
     return view('welcome');

@@ -9,6 +9,44 @@ use App\Models\CV;
 class CVController extends Controller
 {
     //
+    private $delimeter = '----------';
+
+    public function createUsername($firstName, $lastName){
+        $fullName = ucfirst($firstName) . ' ' . ucfirst($lastName);
+        return $fullName;
+    }
+
+    public function createUrlLinks($request, $titleArray, $urlArray){
+        $returnString = '';
+        for($i = 0; $i < count($titleArray); $i++){
+            if($i > 0){
+                $returnString .= "\n";
+                $returnString .= $this->delimeter;
+                $returnString .= "\n";
+            }
+            $returnString .= $request[array_keys($titleArray)[$i]];
+            $returnString .= "\n";
+            $returnString .= $request[array_keys($urlArray)[$i]];
+        }
+        return $returnString;
+    }
+
+    public function createKeyProgrammingAndEducation($request, $nameArray, $durationArray, $descriptionArray){
+        $returnString = '';
+        for($i = 0; $i < count($nameArray); $i++){
+            if($i > 0){
+                $returnString .= "\n";
+                $returnString .= $this->delimeter;
+                $returnString .= "\n";
+            }
+            $returnString .= $request[array_keys($nameArray)[$i]];
+            $returnString .= "\n";
+            $returnString .= $request[array_keys($durationArray)[$i]];
+            $returnString .= "\n";
+            $returnString .= $request[array_keys($descriptionArray)[$i]];
+        }
+        return $returnString;
+    }
 
     public function searchForCVByUserId($userId){
         try{
@@ -64,12 +102,34 @@ class CVController extends Controller
             if($alreadyExistingCV->count()){
                 return back()->with('error', 'Error. You already have a CV.');
             }
-            
+            CV::create([
+                'user_id' => auth()->id(),
+                'name' => $this->createUsername($request['first_name'], $request['last_name']),
+                'email' => auth()->user()->email,
+                'password' => auth()->user()->password,
+                'keyprogramming' => $this->createKeyProgrammingAndEducation($request, $keyProgrammingLanguageNameArray, $keyProgrammingLanguageDurationArray, $keyProgrammingLanguageDescriptionValidationArray),
+                'profile' => $request['profile'],
+                'education' => $this->createKeyProgrammingAndEducation($request, $educationNameValidationArray, $educationDurationValidationArray, $educationDescriptionValidationArray),
+                'URLlinks' => $this->createUrlLinks($request, $urlLinkTitleValidationArray, $urlLinkUrlValidationArray)
+            ]);
         }catch(QueryException $exception){
+            dd($exception);
             return back()->with('error', 'Sorry. There was a problem creating the CV – try again.');
         }
 
         return back()->with('success', 'Success! The CV has been created.');
 
+    }
+
+    public function tryToAccessCreateCV(){
+        $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
+        if($alreadyExistingCV->count()){
+            return redirect()->route('update.cv');
+        }
+        return view('cv.create');
+    }
+
+    public function accessUpdateCV(){
+        return view('cv.update');
     }
 }
