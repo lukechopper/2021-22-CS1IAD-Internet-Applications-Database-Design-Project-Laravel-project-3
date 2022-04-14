@@ -18,6 +18,10 @@
             <div>Success. You are now logged in!</div>
             <div>Click <a href="{{route('home')}}">here</a> to go back to the homepage.</div>
         </div>
+        <!-- SCRIPT TAG to delete the incumbent CV form localStorage data -->
+        <script type="text/javascript">
+            localStorage.clear();
+        </script>
     </div>
     @else
     <div class="centre-container centre-container--login_form">

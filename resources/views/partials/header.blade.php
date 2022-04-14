@@ -33,7 +33,7 @@
             </a>
             @auth
                 @if (auth()->user()->cv)
-                <a href="#"><li>My CV</li></a>
+                <a href="{{route('update.cv')}}"><li>My CV</li></a>
                 @else
                 <a href="{{route('create.cv')}}"><li>Create CV</li></a>
                 @endif
