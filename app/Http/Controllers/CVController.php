@@ -54,6 +54,27 @@ class CVController extends Controller
         return $returnString;
     }
 
+    public function translateStoredUrlLinksIntoProperArray($storedUrlString){
+        $returnArray = array();
+        if(empty($storedUrlString)){
+            return $returnArray;
+        }
+        $splitStringUpOnDelimiter = explode($this->delimeter, $storedUrlString);
+        foreach($splitStringUpOnDelimiter as $value){
+            $eachSeperateLineArray = explode("\n", $value);
+            $aSubArrayWithinTheReturnArray = array();
+            //If the first line of the array is empty, then remove it.
+            if(empty($eachSeperateLineArray[0])){
+                array_splice($eachSeperateLineArray, 0, 1);
+            }
+            $aSubArrayWithinTheReturnArray[0] = $eachSeperateLineArray[0];
+            $aSubArrayWithinTheReturnArray[1] = $eachSeperateLineArray[1];
+
+            $returnArray[] = $aSubArrayWithinTheReturnArray;
+        }
+        return $returnArray;
+    }
+
     public function translateStoredEducationAndProgrammingStringIntoProperArray($storedString){
         $returnArray = array();
         if(empty($storedString)){
@@ -179,10 +200,9 @@ class CVController extends Controller
         $formattedCVStaticInfo['profile'] = $foundCV->profile;
 
         $formattedEducationInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($foundCV->education);
-        $formattedProgrammingInfo =$this->translateStoredEducationAndProgrammingStringIntoProperArray($foundCV->keyprogramming);
+        $formattedProgrammingInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($foundCV->keyprogramming);
+        $formattedUrlLinksInfo = $this->translateStoredUrlLinksIntoProperArray($foundCV->URLlinks);
 
-        dd($formattedEducationInfo);
-
-        return view('cv.update');
+        return view('cv.update',['formattedCVStaticInfo'=>$formattedCVStaticInfo,'formattedEducationInfo'=>$formattedEducationInfo,'formattedProgrammingInfo'=>$formattedProgrammingInfo,'formattedUrlLinksInfo'=>$formattedUrlLinksInfo]);
     }
 }
