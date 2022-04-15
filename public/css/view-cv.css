@@ -1,0 +1,136 @@
+.title{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 2.5rem;
+}
+
+.underline{
+    background-color: black;
+    height: 5px;
+    margin: 0 auto;
+}
+
+.about__title{
+    margin-top: 55px;
+}
+.about__title-underline{
+    width: 100px;
+}
+.about__sub-title{
+    font-size: 2rem;
+    font-weight: 100;
+    text-align: center;
+    margin-top: 30px;
+    letter-spacing: 3px;
+}
+.about__hr{
+    border: none;
+    border-top: 1px solid darkgray;
+    margin-top: 20px;
+    opacity: 0.5;
+}
+.about__main-section{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.about__main-section-col-1{
+    width: 100%;
+}
+.about__main-section-col-2{
+    padding-left: 20px;
+    width: 290px;
+}
+.about__main-section-header{
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.about__main-section-info-desc:not(.about__main-section-info-desc:nth-child(1)){
+    margin-top: 10px;
+}
+.about__main-section-info-desc a{
+    text-decoration: underline;
+}
+@media (max-width: 767px){
+    .about__main-section-col-1{
+        width: 100%;
+    }
+    .about__main-section-col-2{
+        width: 100%;
+        padding-left: 0px;
+        margin-top: 20px;
+    }
+    .about__main-section{
+        flex-wrap: wrap;
+    }
+}
+@media (max-width: 575px){
+    .about__title{
+        margin-top: 120px;
+    }
+}
+
+.education__title{
+    margin-top: 60px;
+}
+.education__title-underline{
+    width: 170px;
+}
+.general-list-item{
+    margin-top: 40px;
+    justify-content: space-between;
+    display: flex;
+}
+.general-list-item em{
+    width: 280px;
+    text-align: right;
+}
+@media (max-width: 767px){
+    .general-list-item{
+        justify-content: flex-start;
+        flex-direction: column;
+    }
+    .general-list-item em{
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: left;
+    }
+}
+
+.programming__title{
+    margin-top: 60px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.programming__title-underline{
+    width: 200px;
+}
+
+@media (max-width: 400px){
+    .programming__title{
+        font-size: 2rem;
+        width: 100%;
+    }
+    .programming__title-underline{
+        width: 120px;
+    }
+}
+
+.url__title{
+    margin-top: 60px;
+}
+.url__title-underline{
+    width: 150px;
+}
+
+.url.container{
+    margin-bottom:55px;
+}
+
+.url__link{
+    text-decoration: underline;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 1.3rem;
+}

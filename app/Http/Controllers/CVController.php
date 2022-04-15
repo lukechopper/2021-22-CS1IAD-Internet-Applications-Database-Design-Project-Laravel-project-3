@@ -277,6 +277,11 @@ class CVController extends Controller
         if(!$cvById){
             return redirect()->route('home');
         }
-        return view('cv.view');
+
+        $formattedEducationInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($cvById->education);
+        $formattedProgrammingInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($cvById->keyprogramming);
+        $formattedUrlLinksInfo = $this->translateStoredUrlLinksIntoProperArray($cvById->URLlinks);
+
+        return view('cv.view', ['name'=>$cvById['name'], 'profile'=>$cvById['profile'], 'email'=>$cvById['email'], 'formattedEducationInfo'=>$formattedEducationInfo,'formattedProgrammingInfo'=>$formattedProgrammingInfo,'formattedUrlLinksInfo'=>$formattedUrlLinksInfo]);
     }
 }
