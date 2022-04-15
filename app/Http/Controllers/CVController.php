@@ -121,8 +121,8 @@ class CVController extends Controller
             return redirect()->route('home');
         }
         $endValidationArray = [
-            'first_name' => 'required|alpha',
-            'last_name' => 'required|alpha',
+            'first_name' => 'required|alpha|max:30',
+            'last_name' => 'required|alpha|max:30',
             'profile' => 'required|min:25'
         ];
         $educationNameValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_name/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
@@ -224,8 +224,8 @@ class CVController extends Controller
         }
 
         $endValidationArray = [
-            'first_name' => 'required|alpha',
-            'last_name' => 'required|alpha',
+            'first_name' => 'required|alpha|max:30',
+            'last_name' => 'required|alpha|max:30',
             'profile' => 'required|min:25'
         ];
 
@@ -283,5 +283,9 @@ class CVController extends Controller
         $formattedUrlLinksInfo = $this->translateStoredUrlLinksIntoProperArray($cvById->URLlinks);
 
         return view('cv.view', ['name'=>$cvById['name'], 'profile'=>$cvById['profile'], 'email'=>$cvById['email'], 'formattedEducationInfo'=>$formattedEducationInfo,'formattedProgrammingInfo'=>$formattedProgrammingInfo,'formattedUrlLinksInfo'=>$formattedUrlLinksInfo]);
+    }
+
+    public function returnHomeView(){
+        return view('welcome', ['cvs'=>CV::all()]);
     }
 }

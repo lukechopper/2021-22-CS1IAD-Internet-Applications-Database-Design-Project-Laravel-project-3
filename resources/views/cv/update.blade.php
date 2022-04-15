@@ -180,7 +180,7 @@
             @endfor
             <!-- END URL LINKS SECTION -->
             <div class="form__container form__container--full" id="form__submit_section">
-                <input type="submit" class="form__submit" value="Submit">
+                <input type="submit" class="form__submit" value="Update">
             </div>
         </form>
     </div>

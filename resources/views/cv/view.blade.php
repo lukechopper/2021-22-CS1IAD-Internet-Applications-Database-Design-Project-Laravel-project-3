@@ -25,7 +25,7 @@
                 </p>
             </div>
             <div class="about__main-section-col-2">
-                <div class="about__main-section-info-desc">
+                <div class="about__main-section-info-desc about__main-section-info-desc--top_padding">
                     <h2 class="about__main-section-header">Email:</h2>
                     <a href="{{'mailto:'.$email}}">
                         <p class="inline">{{$email}}</p>

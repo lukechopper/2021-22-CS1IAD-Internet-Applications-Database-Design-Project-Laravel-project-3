@@ -1,14 +1,3 @@
-.title{
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 2.5rem;
-}
-
-.underline{
-    background-color: black;
-    height: 5px;
-    margin: 0 auto;
-}
 
 .about__title{
     margin-top: 55px;
@@ -46,8 +35,11 @@
     font-size: 1.1rem;
     font-weight: bold;
 }
-.about__main-section-info-desc:not(.about__main-section-info-desc:nth-child(1)){
+.about__main-section-info-desc{
     margin-top: 10px;
+}
+.about__main-section-info-desc.about__main-section-info-desc--top_padding{
+    margin-top: 0px;
 }
 .about__main-section-info-desc a{
     text-decoration: underline;
