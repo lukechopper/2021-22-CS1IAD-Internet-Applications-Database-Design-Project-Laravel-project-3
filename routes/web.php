@@ -41,6 +41,8 @@ Route::get('/update-cv', [CVController::class, 'accessUpdateCV'])->name('update.
 
 Route::get('/cv/{id}', [CVController::class, 'viewCV'])->name('viewCV');
 
+Route::post('/search-cv', [CVController::class, 'searchCV'])->name('searchCV');
+
 Route::any('/{any}', function(){
     return view('welcome');
 })->where('any', '.*');

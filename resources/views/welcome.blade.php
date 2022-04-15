@@ -11,6 +11,11 @@
 @section('body')
 
 <body>
+    <!-- SCRIPT needed to store the route where an AJAX request will be sent from the search input box -->
+    <script type="text/javascript">
+        let searchCVRoute = "{{route('searchCV')}}";
+        let csfrToken = "{{csrf_token()}}";
+    </script>
     <h1 class="title title--cv_collection">CV Collection</h1>
     <div class="container container--search">
         <h2 class="search__header">Search:</h2>

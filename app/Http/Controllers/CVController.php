@@ -288,4 +288,11 @@ class CVController extends Controller
     public function returnHomeView(){
         return view('welcome', ['cvs'=>CV::all()]);
     }
+
+    public function searchCV(Request $request){
+
+        return response()->json([
+            'name' => 'This is your name!'
+        ]);
+    }
 }
