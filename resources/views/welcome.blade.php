@@ -48,7 +48,7 @@
             <div class="{{$baseClass}}">
                 <div class="cv__list_item">
                     <h2 class="cv__name">{{$cvs[$i]->name}}</h2>
-                    <div class="cv__view_cv_btn"><a href="{{route('viewCV',$cvs[$i]->id)}}">View CV</a></div>
+                    <a href="{{route('viewCV',$cvs[$i]->id)}}" class="cv__view_cv_btn">View CV</a>
                 </div>
             </div>
             @endfor

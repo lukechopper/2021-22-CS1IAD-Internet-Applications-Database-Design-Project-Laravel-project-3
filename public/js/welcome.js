@@ -13,6 +13,21 @@ $(function(){
     });
 
     $('#cv_search_input').on('input', function(){
+
+        let searchString =$(this).val();
+
+        let regularExpressionForNameSearch = new RegExp(/[!"`'#%£&,:;<>=@{}~\$\(\)\*\+\/\\\?\[\]\^\|]|[0-9]|\s+/, 'g');
+
+        if(searchConfigOption === 'Name'){
+            searchString = searchString.replace(regularExpressionForNameSearch, '');
+        }
+
+
+        if(!searchString){
+            return;
+        }
+
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': csfrToken
@@ -24,10 +39,10 @@ $(function(){
             dataType : 'json',
             data:{
                 searchConfigOption: searchConfigOption,
-                search: $(this).val()
+                search: searchString
             },
             success: function(response){
-                console.log(response.name);
+                console.log(response);
             },
             error: function(err){
                 console.log(err);

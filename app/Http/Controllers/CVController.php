@@ -291,8 +291,24 @@ class CVController extends Controller
 
     public function searchCV(Request $request){
 
+        $allCVS = CV::all();
+        $foundCVS = array();
+
+        //Search on name
+        if($request->searchConfigOption === 'Name'){
+            foreach($allCVS as $cv){
+                if(preg_match("/^(.*".$request->search.".*)$/i", $cv->name)){
+                    $foundCVS[] = $cv;
+                }
+            }
+        }else{
+            //Search on programming language
+
+        }
+
         return response()->json([
-            'name' => 'This is your name!'
+            'search' => $request->search,
+            'foundCVS' => $foundCVS
         ]);
     }
 }

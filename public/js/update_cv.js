@@ -453,7 +453,7 @@ $(function(){
      });
 
     $(window).bind('beforeunload', function(){
-        if(hasClickedToSubmitForm){
+        if(hasClickedToSubmitForm || canSkipWarningMessage){
             //Have clicked to submit form
             return undefined;
         }

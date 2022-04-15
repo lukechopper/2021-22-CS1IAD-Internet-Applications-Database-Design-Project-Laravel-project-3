@@ -11,6 +11,10 @@
 
 @section('body')
 
+<script type="text/javascript">
+    let canSkipWarningMessage = false;
+</script>
+
 <body>
 <div class="container container--create_cv">
         <form action="{{route('put.update.cv')}}" method="post" class="form">
@@ -27,6 +31,7 @@
                 <!-- SCRIPT TAG -->
                 <script type="text/javascript">
                     localStorage.setItem('edit_cv_done_yet', 'no');
+                    canSkipWarningMessage = true;
                 </script>
                 @endif
             </div>

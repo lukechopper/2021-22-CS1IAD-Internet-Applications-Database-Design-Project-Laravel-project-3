@@ -88,6 +88,7 @@
     word-wrap: break-word;
 }
 .cv__view_cv_btn{
+    display: block;
     font-size: 1.1rem;
     padding: 10px 5px;
     background-color: #E9E9ED;
