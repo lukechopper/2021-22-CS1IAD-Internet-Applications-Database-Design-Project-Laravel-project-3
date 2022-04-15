@@ -207,6 +207,22 @@ class CVController extends Controller
             return redirect()->route('home');
         }
 
+        if($request['delete_cv'] === 'yes'){
+            try{
+                $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
+                if(!$alreadyExistingCV->count()){
+                    return back()->with('error', 'Error. We could not find a CV linked to your user account.');
+                }
+                $foundCV = $alreadyExistingCV[0];
+
+                $foundCV->delete();
+
+                return redirect()->route('create.cv')->with('success', 'Success! The CV has been updated.');
+            }catch(QueryException $exception){
+                return back()->with('error', 'Sorry. There was a problem deleting the CV – try again.');
+            }
+        }
+
         $endValidationArray = [
             'first_name' => 'required|alpha',
             'last_name' => 'required|alpha',
@@ -234,8 +250,6 @@ class CVController extends Controller
 
         $request->validate($endValidationArray);
 
-        dd('Success');
-
         try{
             $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
             if(!$alreadyExistingCV->count()){
@@ -255,5 +269,14 @@ class CVController extends Controller
 
 
         return redirect()->route('update.cv')->with('success', 'Success! The CV has been updated.');
+    }
+
+
+    public function viewCV($id){
+        $cvById = CV::find($id);
+        if(!$cvById){
+            return redirect()->route('home');
+        }
+        return view('cv.view');
     }
 }

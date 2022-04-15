@@ -30,6 +30,10 @@
                 </script>
                 @endif
             </div>
+            <input type="hidden" name="delete_cv" id="delete_cv_hidden_input" value="no" >
+            <div class="form__container form__container--full">
+                <div class="form__delete_cv" id="form__delete_cv"><i class="fa-solid fa-circle-minus"></i>Click Here To Delete CV</div>
+            </div>
             <div class="form__container">
                 <label for="form_first_name">First Name:</label>
                 @if (count($errors->get('last_name')) && !count($errors->get('first_name')))

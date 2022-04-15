@@ -41,6 +41,8 @@ Route::put('/update-cv', [CVController::class, 'updateCV'])->name('put.update.cv
 
 Route::get('/update-cv', [CVController::class, 'accessUpdateCV'])->name('update.cv')->middleware('auth');
 
+Route::get('/cv/{id}', [CVController::class, 'viewCV'])->name('viewCV');
+
 Route::any('/{any}', function(){
     return view('welcome');
 })->where('any', '.*');

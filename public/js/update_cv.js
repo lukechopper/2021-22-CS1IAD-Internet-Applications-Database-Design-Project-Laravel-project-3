@@ -440,9 +440,16 @@ $(function(){
 
 
      $('#form__submit_section input').click(function(){
+        $('#delete_cv_hidden_input').val('no');
         localStorage.setItem('edit_cv_done_yet', 'yes');
         saveFormData();
         hasClickedToSubmitForm = true;
+     });
+
+     $('#form__delete_cv').click(function(){
+        $('#delete_cv_hidden_input').val('yes');
+        localStorage.setItem('edit_cv_done_yet', 'no');
+        $('form').submit();
      });
 
     $(window).bind('beforeunload', function(){
