@@ -37,9 +37,7 @@ Route::get('/create-cv', [CVController::class, 'tryToAccessCreateCV'])->name('cr
 
 Route::post('/create-cv', [CVController::class, 'createCV'])->name('post.create.cv');
 
-Route::put('/update-cv', function(){
-    dd('Everything hurts');
-})->name('put.update.cv');
+Route::put('/update-cv', [CVController::class, 'updateCV'])->name('put.update.cv');
 
 Route::get('/update-cv', [CVController::class, 'accessUpdateCV'])->name('update.cv')->middleware('auth');
 

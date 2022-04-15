@@ -23,6 +23,12 @@
                 @elseif(session('success'))
                     <div class="success_msg">{{session('success')}}</div>
                 @endif
+                @if(session('error') || session('success'))
+                <!-- SCRIPT TAG -->
+                <script type="text/javascript">
+                    localStorage.setItem('edit_cv_done_yet', 'no');
+                </script>
+                @endif
             </div>
             <div class="form__container">
                 <label for="form_first_name">First Name:</label>
@@ -31,7 +37,7 @@
                 @elseif (count($errors->get('first_name')))
                 <div class="error_msg">{{$errors->get('first_name')[0]}}</div>
                 @endif
-                <input type="text" name="first_name" id="form_first_name" class="form__input" value="@if(!empty($formattedCVStaticInfo['first_name'])) {{ $formattedCVStaticInfo['first_name'] }} @endif">
+                <input type="text" name="first_name" id="form_first_name" class="form__input" value="@if(!empty($formattedCVStaticInfo['first_name'])){{$formattedCVStaticInfo['first_name']}} @endif">
             </div>
             <div class="form__container">
                 <label for="form_last_name">Last Name:</label>
@@ -40,7 +46,7 @@
                 @elseif (count($errors->get('last_name')))
                 <div class="error_msg">{{$errors->get('last_name')[0]}}</div>
                 @endif
-                <input type="text" name="last_name" id="form_last_name" class="form__input" value="@if(!empty($formattedCVStaticInfo['last_name'])) {{ $formattedCVStaticInfo['last_name'] }} @endif">
+                <input type="text" name="last_name" id="form_last_name" class="form__input" value="@if(!empty($formattedCVStaticInfo['last_name'])){{$formattedCVStaticInfo['last_name']}} @endif">
             </div>
             <div class="form__container form__container--full">
                 <label for="form_profile">Profile:</label>
@@ -48,7 +54,7 @@
                 <div class="error_msg">{{$message}}</div>
                 @enderror
             </div>
-            <textarea name="profile" id="form_profile" class="form__input form__input--textarea">@if(!empty($formattedCVStaticInfo['profile'])) {{ $formattedCVStaticInfo['profile'] }} @endif</textarea>
+            <textarea name="profile" id="form_profile" class="form__input form__input--textarea">@if(!empty($formattedCVStaticInfo['profile'])){{$formattedCVStaticInfo['profile']}} @endif</textarea>
             <!-- OPEN EDUCATION SECTION -->
             <div class="form__container form__container--full">
                 <label class="bold">Education</label>
@@ -67,7 +73,7 @@
                 @elseif (count($errors->get('education_'.$i.'_name')))
                 <div class="error_msg">{{preg_replace("/The education [0-9]+ name/i",'This education name',$errors->get('education_'.$i.'_name')[0])}}</div>
                 @endif
-                <input type="text" name="{{'education_'.$i.'_name'}}" id="{{'form_education_'.$i.'_name'}}" class="form__input" value="@if(!empty($formattedEducationInfo[$i][0])) {{ $formattedEducationInfo[$i][0] }} @endif">
+                <input type="text" name="{{'education_'.$i.'_name'}}" id="{{'form_education_'.$i.'_name'}}" class="form__input" value="@if(!empty($formattedEducationInfo[$i][0])){{$formattedEducationInfo[$i][0]}} @endif">
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="{{'form_education_'.$i}}">
                 <label for="{{'form_education_'.$i.'_duration'}}">Duration:</label>
@@ -76,7 +82,7 @@
                 @elseif (count($errors->get('education_'.$i.'_duration')))
                 <div class="error_msg">{{preg_replace("/The education [0-9]+ duration/i",'This education duration',$errors->get('education_'.$i.'_duration')[0])}}</div>
                 @endif
-                <input type="text" name="{{'education_'.$i.'_duration'}}" id="{{'form_education_'.$i.'_duration'}}" class="form__input" value="@if(!empty($formattedEducationInfo[$i][1])) {{ $formattedEducationInfo[$i][1] }} @endif">
+                <input type="text" name="{{'education_'.$i.'_duration'}}" id="{{'form_education_'.$i.'_duration'}}" class="form__input" value="@if(!empty($formattedEducationInfo[$i][1])){{$formattedEducationInfo[$i][1]}} @endif">
             </div>
             <div class="form__container form__container--full form__container--less_top_margin" delete_info="{{'form_education_'.$i}}">
                 <label for="{{'form_education_'.$i.'_description'}}">Description:</label>
@@ -85,7 +91,7 @@
                     @if (count($errors->get('education_'.$i.'_description')))
                     <div class="error_msg">{{preg_replace("/The education [0-9]+ description/i",'This education description',$errors->get('education_'.$i.'_description')[0])}}</div>
                     @endif
-                    <textarea name="{{'education_'.$i.'_description'}}" id="{{'form_education_'.$i.'_description'}}" class="form__input form__input--smaller_textarea">@if(!empty($formattedEducationInfo[$i][2])) {{ $formattedEducationInfo[$i][2] }} @endif</textarea>
+                    <textarea name="{{'education_'.$i.'_description'}}" id="{{'form_education_'.$i.'_description'}}" class="form__input form__input--smaller_textarea">@if(!empty($formattedEducationInfo[$i][2])){{$formattedEducationInfo[$i][2]}} @endif</textarea>
                     </div>
                     <div class="form__spacing_between_text_box_and_delete_icon"></div>
                     <i class="fa-solid fa-trash-can" delete_info="{{'form_education_'.$i}}"></i>
@@ -111,16 +117,16 @@
                 @elseif (count($errors->get('key_programming_language_'.$i.'_name')))
                 <div class="error_msg">{{preg_replace("/The key programming language [0-9]+/i",'This language',$errors->get('key_programming_language_'.$i.'_name')[0])}}</div>
                 @endif
-                <input type="text" name="{{'key_programming_language_'.$i.'_name'}}" id="{{'form_key_programming_language_'.$i.'_name'}}" class="form__input" value="@if(!empty($formattedProgrammingInfo[$i][0])) {{ $formattedProgrammingInfo[$i][0] }} @endif">
+                <input type="text" name="{{'key_programming_language_'.$i.'_name'}}" id="{{'form_key_programming_language_'.$i.'_name'}}" class="form__input" value="@if(!empty($formattedProgrammingInfo[$i][0])){{$formattedProgrammingInfo[$i][0]}} @endif">
             </div>
-            <div class="form__container form__container--less_top_margin" delete_info="'form_key_programming_language_'.$i">
+            <div class="form__container form__container--less_top_margin" delete_info="{{'form_key_programming_language_'.$i}}">
                 <label for="{{'form_key_programming_language_'.$i.'_duration'}}">Duration:</label>
                 @if (count($errors->get('key_programming_language_'.$i.'_name')) && !count($errors->get('key_programming_language_'.$i.'_duration')))
                 <div class="error_padding" ></div>
                 @elseif (count($errors->get('key_programming_language_'.$i.'_duration')))
                 <div class="error_msg">{{preg_replace("/The key programming language [0-9]+/i",'This language',$errors->get('key_programming_language_'.$i.'_duration')[0])}}</div>
                 @endif
-                <input type="text" name="{{'key_programming_language_'.$i.'_duration'}}" id="{{'form_key_programming_language_'.$i.'_duration'}}" class="form__input" value="@if(!empty($formattedProgrammingInfo[$i][1])) {{ $formattedProgrammingInfo[$i][1] }} @endif">
+                <input type="text" name="{{'key_programming_language_'.$i.'_duration'}}" id="{{'form_key_programming_language_'.$i.'_duration'}}" class="form__input" value="@if(!empty($formattedProgrammingInfo[$i][1])){{$formattedProgrammingInfo[$i][1]}} @endif">
             </div>
             <div class="form__container form__container--full form__container--less_top_margin" delete_info="{{'form_key_programming_language_'.$i}}">
                 <label for="{{'form_key_programming_language_'.$i.'_description'}}">Description:</label>
@@ -129,7 +135,7 @@
                     @if (count($errors->get('key_programming_language_'.$i.'_description')))
                     <div class="error_msg">{{preg_replace("/The key programming language [0-9]+/i",'This language',$errors->get('key_programming_language_'.$i.'_description')[0])}}</div>
                     @endif
-                    <textarea name="{{'key_programming_language_'.$i.'_description'}}" id="{{'form_key_programming_language_'.$i.'_description'}}" class="form__input form__input--smaller_textarea">@if(!empty($formattedProgrammingInfo[$i][2])) {{ $formattedProgrammingInfo[$i][2] }} @endif</textarea>
+                    <textarea name="{{'key_programming_language_'.$i.'_description'}}" id="{{'form_key_programming_language_'.$i.'_description'}}" class="form__input form__input--smaller_textarea">@if(!empty($formattedProgrammingInfo[$i][2])){{$formattedProgrammingInfo[$i][2]}} @endif</textarea>
                     </div>
                     <div class="form__spacing_between_text_box_and_delete_icon"></div>
                     <i class="fa-solid fa-trash-can" delete_info="{{'form_key_programming_language_'.$i}}"></i>
@@ -152,7 +158,7 @@
                 @elseif (count($errors->get('url_link_'.$i.'_title')))
                 <div class="error_msg">{{preg_replace("/The url link [0-9]+/i",'This url link',$errors->get('url_link_'.$i.'_title')[0])}}</div>
                 @endif
-                <input type="text" name="{{'url_link_'.$i.'_title'}}" id="{{'form_url_link_'.$i.'_title'}}" class="form__input" value="@if(!empty($formattedUrlLinksInfo[$i][0])) {{ $formattedUrlLinksInfo[$i][0] }} @endif">
+                <input type="text" name="{{'url_link_'.$i.'_title'}}" id="{{'form_url_link_'.$i.'_title'}}" class="form__input" value="@if(!empty($formattedUrlLinksInfo[$i][0])){{$formattedUrlLinksInfo[$i][0]}} @endif">
             </div>
             <div class="form__container form__container--less_top_margin" delete_info="{{'form_url_link_'.$i}}">
                 <label for="{{'form_url_link_'.$i.'_url'}}">URL:</label>
@@ -162,7 +168,7 @@
                 <div class="error_msg">{{preg_replace("/The url link [0-9]+/i",'This url link',$errors->get('url_link_'.$i.'_url')[0])}}</div>
                 @endif
                 <div class="form__text_box_then_delete_icon">
-                    <input type="text" name="{{'url_link_'.$i.'_url'}}" id="{{'form_url_link_'.$i.'_url'}}" class="form__input" value="@if(!empty($formattedUrlLinksInfo[$i][1])) {{ $formattedUrlLinksInfo[$i][1] }} @endif">
+                    <input type="text" name="{{'url_link_'.$i.'_url'}}" id="{{'form_url_link_'.$i.'_url'}}" class="form__input" value="@if(!empty($formattedUrlLinksInfo[$i][1])){{$formattedUrlLinksInfo[$i][1]}} @endif">
                     <div class="form__spacing_between_text_box_and_delete_icon"></div>
                     <i class="fa-solid fa-trash-can" delete_info="{{'form_url_link_'.$i}}"></i>
                 </div>
@@ -174,6 +180,24 @@
             </div>
         </form>
     </div>
+    <!-- LARAVEL SCRIPT -->
+    <script type="text/javascript">
+        let errorObj = { };
+        @if (count($errors->get('first_name')))
+        errorObj["first_name"] = "{{$errors->get('first_name')[0]}}";
+        @endif
+
+        @for($i=0;$i<count($errors->all());$i++)
+        errorObj["{{$errors->keys()[$i]}}"] = "{{$errors->all()[$i]}}";
+        @endfor
+
+        let phpEducationItems = {{!empty($formattedEducationInfo[0][0]) ? count($formattedEducationInfo)-1 : 0}};
+        let phpProgrammingLanguagesItems = {{!empty($formattedProgrammingInfo[0][0]) ? count($formattedProgrammingInfo)-1 : 0}};
+        let phpUrlLinksItems = {{!empty($formattedUrlLinksInfo[0][0]) ? count($formattedUrlLinksInfo)-1 : 0}};
+
+    </script>
+    <!-- Create CV SCRIPT -->
+    <script src="{{asset('public/js/update_cv.js')}}"></script>
 </body>
 
 </html>

@@ -101,11 +101,8 @@ class CVController extends Controller
     }
 
     public function searchForCVByUserId($userId){
-        try{
-            $foundCV = CV::where('user_id', $userId)->get();
-        }catch(QueryException $exception){
-            return back()->with('error', 'Sorry. There was a problem creating the CV – try again.');
-        }
+        $foundCV = CV::where('user_id', $userId)->get();
+
         return $foundCV;
     }
 
@@ -165,7 +162,6 @@ class CVController extends Controller
                 'URLlinks' => $this->createUrlLinks($request, $urlLinkTitleValidationArray, $urlLinkUrlValidationArray)
             ]);
         }catch(QueryException $exception){
-            dd($exception);
             return back()->with('error', 'Sorry. There was a problem creating the CV – try again.');
         }
 
@@ -204,5 +200,60 @@ class CVController extends Controller
         $formattedUrlLinksInfo = $this->translateStoredUrlLinksIntoProperArray($foundCV->URLlinks);
 
         return view('cv.update',['formattedCVStaticInfo'=>$formattedCVStaticInfo,'formattedEducationInfo'=>$formattedEducationInfo,'formattedProgrammingInfo'=>$formattedProgrammingInfo,'formattedUrlLinksInfo'=>$formattedUrlLinksInfo]);
+    }
+
+    public function updateCV(Request $request){
+        if(!$request->isMethod('put')){
+            return redirect()->route('home');
+        }
+
+        $endValidationArray = [
+            'first_name' => 'required|alpha',
+            'last_name' => 'required|alpha',
+            'profile' => 'required|min:25'
+        ];
+
+        $educationNameValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_name/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
+        $endValidationArray = array_merge($endValidationArray, $educationNameValidationArray);
+        $educationDurationValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_duration/i", ['required', 'regex:/^([a-z]|[A-Z])+ [0-9]{4}(( [-–—] (([a-z]|[A-Z])+ [0-9]{4}))| [-–—] Present)?$/i']);
+        $endValidationArray = array_merge($endValidationArray, $educationDurationValidationArray);
+        $educationDescriptionValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_description/i", 'required|min:13');
+        $endValidationArray = array_merge($endValidationArray, $educationDescriptionValidationArray);
+
+        $keyProgrammingLanguageNameArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_name/i", 'required');
+        $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageNameArray);
+        $keyProgrammingLanguageDurationArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_duration/i", ['required', 'regex:/^([a-z]|[A-Z])+ [0-9]{4}(( [-–—] (([a-z]|[A-Z])+ [0-9]{4}))| [-–—] Present)?$/']);
+        $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageDurationArray);
+        $keyProgrammingLanguageDescriptionValidationArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_description/i", 'required|min:13');
+        $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageDescriptionValidationArray);
+
+        $urlLinkTitleValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_title/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
+        $endValidationArray = array_merge($endValidationArray, $urlLinkTitleValidationArray);
+        $urlLinkUrlValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_url/i", 'required|url');
+        $endValidationArray = array_merge($endValidationArray, $urlLinkUrlValidationArray);
+
+        $request->validate($endValidationArray);
+
+        dd('Success');
+
+        try{
+            $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
+            if(!$alreadyExistingCV->count()){
+                return back()->with('error', 'Error. We could not find a CV linked to your user account.');
+            }
+            $foundCV = $alreadyExistingCV[0];
+            $foundCV['name'] = $this->createUsername($request['first_name'], $request['last_name']);
+            $foundCV['keyprogramming'] = $this->createKeyProgrammingAndEducation($request, $keyProgrammingLanguageNameArray, $keyProgrammingLanguageDurationArray, $keyProgrammingLanguageDescriptionValidationArray);
+            $foundCV['profile'] = $this->removeDelimeter($request['profile']);
+            $foundCV['education'] = $this->createKeyProgrammingAndEducation($request, $educationNameValidationArray, $educationDurationValidationArray, $educationDescriptionValidationArray);
+            $foundCV['URLlinks'] = $this->createUrlLinks($request, $urlLinkTitleValidationArray, $urlLinkUrlValidationArray);
+
+            $foundCV->save();
+        }catch(QueryException $exception){
+            return back()->with('error', 'Sorry. There was a problem updating the CV – try again.');
+        }
+
+
+        return redirect()->route('update.cv')->with('success', 'Success! The CV has been updated.');
     }
 }

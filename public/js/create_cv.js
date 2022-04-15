@@ -1,5 +1,7 @@
 $(function(){
 
+    localStorage.setItem('edit_cv_done_yet', 'no');
+
     /**
      * CV Form template names, both for the static parts of the form and the dynamic parts of the form. The ones relating to the dynamic parts of the form will have 'NUM' written in them.
      * @type {Array<strings>}
@@ -169,8 +171,6 @@ $(function(){
             localStorage.setItem(dynamicName, '');
         });
     }
-
-    console.log(errorObj);
 
     /**
      * used in the 'displayDynamicFormDataOnLoad' to do exactly that. Depending on the number of the given type of dynamic inputs that a particular call of this function is set to generate, as specified by the 'storedLength' parameter, this function will either add the input and then retrive its data from localStorage before setting it to be the value of the input that it just added, if the input is more than the first input of its kind in the DOM, or, if it is the first input of its kind in the DOM, then it will simply retrive this inputs value from localStorage and then set this retrived value to be its value as this input is already hard coded into the DOM.
