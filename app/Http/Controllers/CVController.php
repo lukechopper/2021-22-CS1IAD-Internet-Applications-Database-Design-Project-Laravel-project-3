@@ -11,21 +11,24 @@ class CVController extends Controller
     //
     private $delimeter = '----------';
 
-    function removeDelimeter($stringToRemoveDelimeterFrom){
+    function removeDelimeter($stringToRemoveDelimeterFrom)
+    {
         $returnString = '';
-        $returnString = preg_replace("/".$this->delimeter."/i",'',$stringToRemoveDelimeterFrom);
+        $returnString = preg_replace("/" . $this->delimeter . "/i", '', $stringToRemoveDelimeterFrom);
         return $returnString;
     }
 
-    public function createUsername($firstName, $lastName){
+    public function createUsername($firstName, $lastName)
+    {
         $fullName = ucfirst($firstName) . ' ' . ucfirst($lastName);
         return $fullName;
     }
 
-    public function createUrlLinks($request, $titleArray, $urlArray){
+    public function createUrlLinks($request, $titleArray, $urlArray)
+    {
         $returnString = '';
-        for($i = 0; $i < count($titleArray); $i++){
-            if($i > 0){
+        for ($i = 0; $i < count($titleArray); $i++) {
+            if ($i > 0) {
                 $returnString .= "\n";
                 $returnString .= $this->delimeter;
                 $returnString .= "\n";
@@ -37,10 +40,11 @@ class CVController extends Controller
         return $returnString;
     }
 
-    public function createKeyProgrammingAndEducation($request, $nameArray, $durationArray, $descriptionArray){
+    public function createKeyProgrammingAndEducation($request, $nameArray, $durationArray, $descriptionArray)
+    {
         $returnString = '';
-        for($i = 0; $i < count($nameArray); $i++){
-            if($i > 0){
+        for ($i = 0; $i < count($nameArray); $i++) {
+            if ($i > 0) {
                 $returnString .= "\n";
                 $returnString .= $this->delimeter;
                 $returnString .= "\n";
@@ -54,17 +58,18 @@ class CVController extends Controller
         return $returnString;
     }
 
-    public function translateStoredUrlLinksIntoProperArray($storedUrlString){
+    public function translateStoredUrlLinksIntoProperArray($storedUrlString)
+    {
         $returnArray = array();
-        if(empty($storedUrlString)){
+        if (empty($storedUrlString)) {
             return $returnArray;
         }
         $splitStringUpOnDelimiter = explode($this->delimeter, $storedUrlString);
-        foreach($splitStringUpOnDelimiter as $value){
+        foreach ($splitStringUpOnDelimiter as $value) {
             $eachSeperateLineArray = explode("\n", $value);
             $aSubArrayWithinTheReturnArray = array();
             //If the first line of the array is empty, then remove it.
-            if(empty($eachSeperateLineArray[0])){
+            if (empty($eachSeperateLineArray[0])) {
                 array_splice($eachSeperateLineArray, 0, 1);
             }
             $aSubArrayWithinTheReturnArray[0] = $eachSeperateLineArray[0];
@@ -75,24 +80,25 @@ class CVController extends Controller
         return $returnArray;
     }
 
-    public function translateStoredEducationAndProgrammingStringIntoProperArray($storedString){
+    public function translateStoredEducationAndProgrammingStringIntoProperArray($storedString)
+    {
         $returnArray = array();
-        if(empty($storedString)){
+        if (empty($storedString)) {
             return $returnArray;
         }
         $splitStringUpOnDelimiter = explode($this->delimeter, $storedString);
-        foreach($splitStringUpOnDelimiter as $value){
+        foreach ($splitStringUpOnDelimiter as $value) {
             $eachSeperateLineArray = explode("\n", $value);
             $aSubArrayWithinTheReturnArray = array();
             //If the first line of the array is empty, then remove it.
-            if(empty($eachSeperateLineArray[0])){
+            if (empty($eachSeperateLineArray[0])) {
                 array_splice($eachSeperateLineArray, 0, 1);
             }
             $aSubArrayWithinTheReturnArray[0] = $eachSeperateLineArray[0];
             $aSubArrayWithinTheReturnArray[1] = $eachSeperateLineArray[1];
             $lastValueOfSubArray = $value;
-            $lastValueOfSubArray = preg_replace("/".$eachSeperateLineArray[0]."/i",'',$lastValueOfSubArray, 1);
-            $lastValueOfSubArray = preg_replace("/".$eachSeperateLineArray[1]."/i",'',$lastValueOfSubArray, 1);
+            $lastValueOfSubArray = preg_replace("/" . $eachSeperateLineArray[0] . "/i", '', $lastValueOfSubArray, 1);
+            $lastValueOfSubArray = preg_replace("/" . $eachSeperateLineArray[1] . "/i", '', $lastValueOfSubArray, 1);
             $aSubArrayWithinTheReturnArray[2] = trim($lastValueOfSubArray);
 
             $returnArray[] = $aSubArrayWithinTheReturnArray;
@@ -100,24 +106,27 @@ class CVController extends Controller
         return $returnArray;
     }
 
-    public function searchForCVByUserId($userId){
+    public function searchForCVByUserId($userId)
+    {
         $foundCV = CV::where('user_id', $userId)->get();
 
         return $foundCV;
     }
 
-    public function createValidationArray($requestArray, $regex, $validationValue){
+    public function createValidationArray($requestArray, $regex, $validationValue)
+    {
         $validationArray = array();
-        foreach($requestArray as $key => $value){
-            if(preg_match($regex, $key)){
+        foreach ($requestArray as $key => $value) {
+            if (preg_match($regex, $key)) {
                 $validationArray[$key] = $validationValue;
             }
         }
         return $validationArray;
     }
 
-    public function createCV(Request $request){
-        if(!$request->isMethod('post')){
+    public function createCV(Request $request)
+    {
+        if (!$request->isMethod('post')) {
             return redirect()->route('home');
         }
         $endValidationArray = [
@@ -146,9 +155,9 @@ class CVController extends Controller
 
         $request->validate($endValidationArray);
 
-        try{
+        try {
             $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
-            if($alreadyExistingCV->count()){
+            if ($alreadyExistingCV->count()) {
                 return back()->with('error', 'Error. You already have a CV.');
             }
             CV::create([
@@ -161,56 +170,58 @@ class CVController extends Controller
                 'education' => $this->createKeyProgrammingAndEducation($request, $educationNameValidationArray, $educationDurationValidationArray, $educationDescriptionValidationArray),
                 'URLlinks' => $this->createUrlLinks($request, $urlLinkTitleValidationArray, $urlLinkUrlValidationArray)
             ]);
-        }catch(QueryException $exception){
+        } catch (QueryException $exception) {
             return back()->with('error', 'Sorry. There was a problem creating the CV – try again.');
         }
 
         return back()->with('success', 'Success! The CV has been created.');
-
     }
 
-    public function tryToAccessCreateCV(){
+    public function tryToAccessCreateCV()
+    {
 
-        if(!empty(session('error')) ||  !empty(session('success'))){
+        if (!empty(session('error')) ||  !empty(session('success'))) {
             return view('cv.create');
         }
 
         $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
-        if($alreadyExistingCV->count()){
+        if ($alreadyExistingCV->count()) {
             return redirect()->route('update.cv');
         }
         return view('cv.create');
     }
 
-    public function accessUpdateCV(){
+    public function accessUpdateCV()
+    {
         $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
-        if(!$alreadyExistingCV->count()){
+        if (!$alreadyExistingCV->count()) {
             return redirect()->route('create.cv');
         }
 
         $foundCV = $alreadyExistingCV[0];
 
         $formattedCVStaticInfo = array();
-        $formattedCVStaticInfo['first_name'] = explode(" " ,$foundCV->name)[0];
-        $formattedCVStaticInfo['last_name'] = explode(" " ,$foundCV->name)[1];
+        $formattedCVStaticInfo['first_name'] = explode(" ", $foundCV->name)[0];
+        $formattedCVStaticInfo['last_name'] = explode(" ", $foundCV->name)[1];
         $formattedCVStaticInfo['profile'] = $foundCV->profile;
 
         $formattedEducationInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($foundCV->education);
         $formattedProgrammingInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($foundCV->keyprogramming);
         $formattedUrlLinksInfo = $this->translateStoredUrlLinksIntoProperArray($foundCV->URLlinks);
 
-        return view('cv.update',['formattedCVStaticInfo'=>$formattedCVStaticInfo,'formattedEducationInfo'=>$formattedEducationInfo,'formattedProgrammingInfo'=>$formattedProgrammingInfo,'formattedUrlLinksInfo'=>$formattedUrlLinksInfo]);
+        return view('cv.update', ['formattedCVStaticInfo' => $formattedCVStaticInfo, 'formattedEducationInfo' => $formattedEducationInfo, 'formattedProgrammingInfo' => $formattedProgrammingInfo, 'formattedUrlLinksInfo' => $formattedUrlLinksInfo]);
     }
 
-    public function updateCV(Request $request){
-        if(!$request->isMethod('put')){
+    public function updateCV(Request $request)
+    {
+        if (!$request->isMethod('put')) {
             return redirect()->route('home');
         }
 
-        if($request['delete_cv'] === 'yes'){
-            try{
+        if ($request['delete_cv'] === 'yes') {
+            try {
                 $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
-                if(!$alreadyExistingCV->count()){
+                if (!$alreadyExistingCV->count()) {
                     return back()->with('error', 'Error. We could not find a CV linked to your user account.');
                 }
                 $foundCV = $alreadyExistingCV[0];
@@ -218,7 +229,7 @@ class CVController extends Controller
                 $foundCV->delete();
 
                 return redirect()->route('create.cv')->with('success', 'Success! The CV has been updated.');
-            }catch(QueryException $exception){
+            } catch (QueryException $exception) {
                 return back()->with('error', 'Sorry. There was a problem deleting the CV – try again.');
             }
         }
@@ -250,9 +261,9 @@ class CVController extends Controller
 
         $request->validate($endValidationArray);
 
-        try{
+        try {
             $alreadyExistingCV = $this->searchForCVByUserId(auth()->id());
-            if(!$alreadyExistingCV->count()){
+            if (!$alreadyExistingCV->count()) {
                 return back()->with('error', 'Error. We could not find a CV linked to your user account.');
             }
             $foundCV = $alreadyExistingCV[0];
@@ -263,7 +274,7 @@ class CVController extends Controller
             $foundCV['URLlinks'] = $this->createUrlLinks($request, $urlLinkTitleValidationArray, $urlLinkUrlValidationArray);
 
             $foundCV->save();
-        }catch(QueryException $exception){
+        } catch (QueryException $exception) {
             return back()->with('error', 'Sorry. There was a problem updating the CV – try again.');
         }
 
@@ -272,9 +283,10 @@ class CVController extends Controller
     }
 
 
-    public function viewCV($id){
+    public function viewCV($id)
+    {
         $cvById = CV::find($id);
-        if(!$cvById){
+        if (!$cvById) {
             return redirect()->route('home');
         }
 
@@ -282,28 +294,44 @@ class CVController extends Controller
         $formattedProgrammingInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($cvById->keyprogramming);
         $formattedUrlLinksInfo = $this->translateStoredUrlLinksIntoProperArray($cvById->URLlinks);
 
-        return view('cv.view', ['name'=>$cvById['name'], 'profile'=>$cvById['profile'], 'email'=>$cvById['email'], 'formattedEducationInfo'=>$formattedEducationInfo,'formattedProgrammingInfo'=>$formattedProgrammingInfo,'formattedUrlLinksInfo'=>$formattedUrlLinksInfo]);
+        return view('cv.view', ['name' => $cvById['name'], 'profile' => $cvById['profile'], 'email' => $cvById['email'], 'formattedEducationInfo' => $formattedEducationInfo, 'formattedProgrammingInfo' => $formattedProgrammingInfo, 'formattedUrlLinksInfo' => $formattedUrlLinksInfo]);
     }
 
-    public function returnHomeView(){
-        return view('welcome', ['cvs'=>CV::all()]);
+    public function returnHomeView()
+    {
+        return view('welcome', ['cvs' => CV::all()]);
     }
 
-    public function searchCV(Request $request){
+    public function searchCV(Request $request)
+    {
 
         $allCVS = CV::all();
         $foundCVS = array();
 
         //Search on name
-        if($request->searchConfigOption === 'Name'){
-            foreach($allCVS as $cv){
-                if(preg_match("/^(.*".$request->search.".*)$/i", $cv->name)){
+        if ($request->searchConfigOption === 'Name') {
+            foreach ($allCVS as $cv) {
+                $nameWithoutSpaces = preg_replace("/\s+/i", '', $cv->name);
+                if (preg_match("/^(.*" . $request->search . ".*)$/i", $nameWithoutSpaces)) {
                     $foundCVS[] = $cv;
                 }
             }
-        }else{
+        } else {
             //Search on programming language
-
+            foreach ($allCVS as $cv) {
+                $formattedProgrammingInfo = $this->translateStoredEducationAndProgrammingStringIntoProperArray($cv->keyprogramming);
+                $alreadyMatchedThisCV = false;
+                foreach ($formattedProgrammingInfo as $formattedProgrammingInfoSection) {
+                    if($alreadyMatchedThisCV){
+                        continue;
+                    }
+                    $programmingNameWithoutSpaces = preg_replace("/\s+/i", '', $formattedProgrammingInfoSection[0]);
+                    if (preg_match("/^(.*" . $request->search . ".*)$/i", $programmingNameWithoutSpaces)) {
+                        $foundCVS[] = $cv;
+                        $alreadyMatchedThisCV = true;
+                    }
+                }
+            }
         }
 
         return response()->json([

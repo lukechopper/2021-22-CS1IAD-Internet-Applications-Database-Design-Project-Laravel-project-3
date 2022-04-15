@@ -14,6 +14,7 @@
     <!-- SCRIPT needed to store the route where an AJAX request will be sent from the search input box -->
     <script type="text/javascript">
         let searchCVRoute = "{{route('searchCV')}}";
+        let normalViewCVRoute = "{{route('viewCV',0)}}";
         let csfrToken = "{{csrf_token()}}";
     </script>
     <h1 class="title title--cv_collection">CV Collection</h1>
@@ -27,7 +28,7 @@
         <input type="text" name="cv_search_input" id="cv_search_input" class="search__search_box" placeholder="Enter search here">
     </div>
 
-    <div class="container container--cv">
+    <div class="container container--cv" id="cv_container">
         @for($i=0;$i < count($cvs); $i++) <!-- SCRIPT TO SORT OUT STYLING FOR CV LIST ITEM -->
             @php
                 $baseClass = 'cv__list_item_container';

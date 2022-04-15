@@ -65,7 +65,10 @@
     flex-wrap: wrap;
     margin-bottom:20px ;
 }
-
+.cv__sorry_no_matches_msg{
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
 .cv__list_item_container{
     width: 33.3333333333%;
     padding: 0 10px;
