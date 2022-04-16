@@ -26,6 +26,9 @@
                     <div class="error_msg">{{session('error')}}</div>
                 @elseif(session('success'))
                     <div class="success_msg">{{session('success')}}</div>
+                    @if(session('success') === 'Success! The CV has been updated.')
+                    <div class="success_msg success_msg--second_line">Click <a href="{{route('viewCV', auth()->user()->cv->id)}}" class="bold">here</a> to view it.</div>
+                    @endif
                 @endif
                 @if(session('error') || session('success'))
                 <!-- SCRIPT TAG -->

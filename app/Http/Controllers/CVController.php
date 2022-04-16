@@ -228,7 +228,7 @@ class CVController extends Controller
 
                 $foundCV->delete();
 
-                return redirect()->route('create.cv')->with('success', 'Success! The CV has been updated.');
+                return redirect()->route('create.cv')->with('success', 'Success! The CV has been deleted.');
             } catch (QueryException $exception) {
                 return back()->with('error', 'Sorry. There was a problem deleting the CV – try again.');
             }

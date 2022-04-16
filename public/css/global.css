@@ -45,9 +45,17 @@ a{
     font-size: 1rem;
 }
 
+.error_msg.error_msg--second_line{
+    margin-top: 2px;
+}
+
 .success_msg{
     color: #04AA6D;
     font-size: 1rem;
+}
+
+.success_msg.success_msg--second_line{
+    margin-top: 2px;
 }
 
 button, input, select, textarea {

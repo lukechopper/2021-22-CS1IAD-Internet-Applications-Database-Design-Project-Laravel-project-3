@@ -19,8 +19,14 @@
                 <h1 class="form__header">Create CV</h1>
                 @if(session('error'))
                     <div class="error_msg">{{session('error')}}</div>
+                    @if(session('error' === 'Error. You already have a CV.'))
+                        <div class="error_msg error_msg--second_line">Click <a href="{{route('create.cv')}}" class="bold" >here</a> to edit it</div>
+                    @endif
                 @elseif(session('success'))
                     <div class="success_msg">{{session('success')}}</div>
+                    @if(session('success') === 'Success! The CV has been created.')
+                    <div class="success_msg success_msg--second_line">Click <a href="{{route('viewCV', auth()->user()->cv->id)}}" class="bold">here</a> to view it.</div>
+                    @endif
                 @endif
             </div>
             <div class="form__container">

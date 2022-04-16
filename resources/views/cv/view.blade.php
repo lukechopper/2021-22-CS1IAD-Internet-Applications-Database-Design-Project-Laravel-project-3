@@ -34,6 +34,7 @@
             </div>
         </div>
     </section>
+    @if(count($formattedEducationInfo))
     <section class="education container" id="education">
         <h1 class="title education__title">Education</h1>
         <div class="underline education__title-underline"></div>
@@ -45,6 +46,8 @@
         <p>{{$formattedEducationInfo[$i][2]}}</p>
         @endfor
     </section>
+    @endif
+    @if(count($formattedProgrammingInfo))
     <section class="programming container">
         <h1 class="title programming__title">Programming Languages</h1>
         <div class="underline programming__title-underline"></div>
@@ -56,6 +59,8 @@
         <p>{{$formattedProgrammingInfo[$i][2]}}</p>
         @endfor
     </section>
+    @endif
+    @if(count($formattedUrlLinksInfo))
     <section class="url container">
         <h1 class="title url__title">URL Links</h1>
         <div class="underline url__title-underline"></div>
@@ -66,6 +71,8 @@
         <p><a href="{{$formattedUrlLinksInfo[$i][1]}}" class="url__link" target="_blank">{{$formattedUrlLinksInfo[$i][1]}}</a></p>
         @endfor
     </section>
+    @endif
+    <footer></footer>
 </body>
 
 </html>

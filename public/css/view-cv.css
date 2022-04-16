@@ -117,12 +117,13 @@
     width: 150px;
 }
 
-.url.container{
-    margin-bottom:55px;
-}
-
 .url__link{
     text-decoration: underline;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 1.3rem;
+}
+
+
+footer{
+    height: 55px;
 }

@@ -446,16 +446,29 @@ $(function(){
         hasClickedToSubmitForm = true;
      });
 
+     let hasClickedToDeleteCV = false;
      $('#form__delete_cv').click(function(){
         $('#delete_cv_hidden_input').val('yes');
-        localStorage.setItem('edit_cv_done_yet', 'no');
+        hasClickedToDeleteCV = true;
+        localStorage.clear();
         $('form').submit();
      });
+
+     //Delete all leading and trailing whitespace from inputs if the values have been generated from the blade template only
+     if(localStorage.getItem('edit_cv_done_yet') === 'no'){
+         $('input,textarea').each(function(){
+            $(this).val($(this).val().trim());
+         });
+     }
 
     $(window).bind('beforeunload', function(){
         if(hasClickedToSubmitForm || canSkipWarningMessage){
             //Have clicked to submit form
             return undefined;
+        }
+        if(hasClickedToDeleteCV){
+            hasClickedToDeleteCV = false;
+            return 'Are you sure you want to delete the CV?';
         }
         if(localStorage.getItem('edit_cv_done_yet') === 'no'){
             //Just a regular moment – have not clicked to submit form

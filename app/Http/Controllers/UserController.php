@@ -16,7 +16,7 @@ class UserController extends Controller
             return redirect()->route('home');
         }
         $request->validate([
-            'username' => 'required|unique:users|max:255',
+            'username' => 'required|unique:users|max:255|alpha_dash',
             'email' => 'required|email|unique:users|max:255',
             'password' => [
                 'required',
