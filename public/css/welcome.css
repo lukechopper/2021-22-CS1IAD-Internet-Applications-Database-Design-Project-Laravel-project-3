@@ -1,5 +1,6 @@
 .title.title--cv_collection{
     margin-top: 20px;
+    padding: 0 20px;
 }
 .container.container--search{
     margin-top: 20px;
@@ -127,5 +128,13 @@
     }
     div.cv__list_item_container.cv__list_item_container--medium_right{
         padding-left: 0px;
+    }
+}
+@media(max-width: 498px){
+    .cv__name{
+        font-size: 1.45rem;
+    }
+    .cv__view_cv_btn{
+        font-size: 1rem;
     }
 }

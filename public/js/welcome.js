@@ -74,7 +74,7 @@ $(function(){
         });
         $.ajax({
             url: searchCVRoute,
-            type: 'POST',
+            type: 'GET',
             dataType : 'json',
             data:{
                 searchConfigOption: searchConfigOption,
@@ -91,12 +91,12 @@ $(function(){
             error: function(err){
                 setTimeout(function(){
                     searchInputEventListener();
-                }, 500);
+                }, 1000);
             }
         });
     }
 
-    $('#cv_search_input').on('input', searchInputEventListener);
+    $('#cv_search_input').on('keyup', searchInputEventListener);
 
 
 });

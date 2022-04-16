@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- FAVICON HERE -->
+    <link rel="shortcut icon" href="{{asset('public/img/cv-icon.png')}}" type="image/png">
     <!-- Global CSS file, used for the header, here -->
     <link rel="stylesheet" href="{{asset('public/css/global.css')}}">
     <!-- Include CSS analagous to a specific view here -->

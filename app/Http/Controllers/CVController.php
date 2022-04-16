@@ -305,14 +305,21 @@ class CVController extends Controller
     public function searchCV(Request $request)
     {
 
+        if (!$request->ajax()) {
+            return redirect()->route('home');
+        }
+
         $allCVS = CV::all();
         $foundCVS = array();
 
+        $requestSearchConfigOption = $request->get('searchConfigOption');
+        $requestSearch = $request->get('search');
+
         //Search on name
-        if ($request->searchConfigOption === 'Name') {
+        if ($requestSearchConfigOption === 'Name') {
             foreach ($allCVS as $cv) {
                 $nameWithoutSpaces = preg_replace("/\s+/i", '', $cv->name);
-                if (preg_match("/^(.*" . $request->search . ".*)$/i", $nameWithoutSpaces)) {
+                if (preg_match("/^(.*" . $requestSearch . ".*)$/i", $nameWithoutSpaces)) {
                     $foundCVS[] = $cv;
                 }
             }
@@ -326,7 +333,7 @@ class CVController extends Controller
                         continue;
                     }
                     $programmingNameWithoutSpaces = preg_replace("/\s+/i", '', $formattedProgrammingInfoSection[0]);
-                    if (preg_match("/^(.*" . $request->search . ".*)$/i", $programmingNameWithoutSpaces)) {
+                    if (preg_match("/^(.*" . $requestSearch . ".*)$/i", $programmingNameWithoutSpaces)) {
                         $foundCVS[] = $cv;
                         $alreadyMatchedThisCV = true;
                     }
@@ -335,7 +342,7 @@ class CVController extends Controller
         }
 
         return response()->json([
-            'search' => $request->search,
+            'search' => $requestSearch,
             'foundCVS' => $foundCVS
         ]);
     }
