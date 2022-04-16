@@ -18,13 +18,9 @@ use App\Http\Controllers\NewPasswordController;
 
 Route::get('/', [CVController::class, 'returnHomeView'])->name('home');
 
-Route::get('/login', function(){
-    return view('login');
-})->name('login');
+Route::get('/login', [UserController::class, 'accessLogin'])->name('login');
 
-Route::get('/signup', function(){
-    return view('signup');
-})->name('signup');
+Route::get('/signup', [UserController::class, 'accessSignup'])->name('signup');
 
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 

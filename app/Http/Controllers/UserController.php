@@ -11,6 +11,27 @@ use App\Models\User;
 class UserController extends Controller
 {
     //
+
+    public function preventUnLoggedInUserFromReachingTheRouteUnlessTheyHaveJustBeenFlashedTheRelevantSessionVariables($viewName){
+        if (!empty(session('error')) ||  !empty(session('success'))) {
+            return view($viewName);
+        }
+        if(auth()->user()){
+            return redirect()->route('home');
+        }
+        return view($viewName);
+    }
+
+    public function accessLogin(){
+        $returnVal = $this->preventUnLoggedInUserFromReachingTheRouteUnlessTheyHaveJustBeenFlashedTheRelevantSessionVariables('login');
+        return $returnVal;
+    }
+
+    public function accessSignup(){
+        $returnVal = $this->preventUnLoggedInUserFromReachingTheRouteUnlessTheyHaveJustBeenFlashedTheRelevantSessionVariables('signup');
+        return $returnVal;
+    }
+
     public function signup(Request $request){
         if(!$request->isMethod('post')){
             return redirect()->route('home');
