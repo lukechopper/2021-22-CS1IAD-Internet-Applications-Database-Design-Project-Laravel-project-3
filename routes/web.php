@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CVController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +47,5 @@ Route::get('/search-cv', [CVController::class, 'searchCV'])->name('searchCV');
 Route::any('/{any}', function(){
     return view('welcome');
 })->where('any', '.*');
+
+Auth::routes();

@@ -73,6 +73,14 @@
     background-color: #059862;
 }
 
+.form__forgot_password_msg{
+    color: #04AA6D;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 20px;
+    display: block;
+}
+
 .info_box{
     font-size: 1.1rem;
     border: 1px solid lightgray;

@@ -52,6 +52,7 @@
                 <input type="checkbox" name="remember" id="form_remember">
             </div>
             <input type="submit" class="form__submit" value="Login" />
+            <a href="{{route('password.request')}}" class="form__forgot_password_msg">Forgot Password?</a>
         </form>
     </div>
     <!-- FORM SCRIPT -->
