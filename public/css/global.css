@@ -100,6 +100,9 @@ button, input, select, textarea {
     padding: 0 20px;
     min-height: 490px;
 }
+.centre-container.centre-container__request_to_change_password{
+    min-height: 650px;
+}
 
 /* HEADER CONTENT BEGINS */
 #header{

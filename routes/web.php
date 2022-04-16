@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CVController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\NewPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,8 +44,12 @@ Route::get('/cv/{id}', [CVController::class, 'viewCV'])->name('viewCV');
 
 Route::get('/search-cv', [CVController::class, 'searchCV'])->name('searchCV');
 
+Route::get('/request-to-change-password', function(){
+    return view('requestToChangePassword');
+})->name('requestToChangePassword')->middleware('guest');
+
+Route::post('/forgot-password', [NewPasswordController::class, 'forgotPassword'])->name('forgotPassword');
+
 Route::any('/{any}', function(){
     return view('welcome');
 })->where('any', '.*');
-
-Auth::routes();
