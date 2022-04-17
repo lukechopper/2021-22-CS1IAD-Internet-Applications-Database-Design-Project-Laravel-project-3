@@ -200,7 +200,9 @@
         @endif
 
         @for($i=0;$i<count($errors->all());$i++)
+        @if(!empty($errors->keys()[$i]))
         errorObj["{{$errors->keys()[$i]}}"] = "{{$errors->all()[$i]}}";
+        @endif
         @endfor
 
         let phpEducationItems = {{!empty($formattedEducationInfo[0][0]) ? count($formattedEducationInfo)-1 : 0}};

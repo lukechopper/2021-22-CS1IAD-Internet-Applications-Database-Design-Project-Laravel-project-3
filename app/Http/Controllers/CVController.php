@@ -132,23 +132,23 @@ class CVController extends Controller
         $endValidationArray = [
             'first_name' => 'required|alpha|max:30',
             'last_name' => 'required|alpha|max:30',
-            'profile' => 'required|min:25'
+            'profile' => 'required|min:25|max:500'
         ];
-        $educationNameValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_name/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
+        $educationNameValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_name/i", 'required|max:255|regex:/(^[a-zA-Z0-9 ]+$)+/i');
         $endValidationArray = array_merge($endValidationArray, $educationNameValidationArray);
         $educationDurationValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_duration/i", ['required', 'regex:/^([a-z]|[A-Z])+ [0-9]{4}(( [-–—] (([a-z]|[A-Z])+ [0-9]{4}))| [-–—] Present)?$/i']);
         $endValidationArray = array_merge($endValidationArray, $educationDurationValidationArray);
         $educationDescriptionValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_description/i", 'required|min:13');
         $endValidationArray = array_merge($endValidationArray, $educationDescriptionValidationArray);
 
-        $keyProgrammingLanguageNameArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_name/i", 'required');
+        $keyProgrammingLanguageNameArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_name/i", 'required|max:255');
         $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageNameArray);
         $keyProgrammingLanguageDurationArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_duration/i", ['required', 'regex:/^([a-z]|[A-Z])+ [0-9]{4}(( [-–—] (([a-z]|[A-Z])+ [0-9]{4}))| [-–—] Present)?$/']);
         $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageDurationArray);
         $keyProgrammingLanguageDescriptionValidationArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_description/i", 'required|min:13');
         $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageDescriptionValidationArray);
 
-        $urlLinkTitleValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_title/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
+        $urlLinkTitleValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_title/i", 'required|max:255|regex:/(^[a-zA-Z0-9 ]+$)+/i');
         $endValidationArray = array_merge($endValidationArray, $urlLinkTitleValidationArray);
         $urlLinkUrlValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_url/i", 'required|url');
         $endValidationArray = array_merge($endValidationArray, $urlLinkUrlValidationArray);
@@ -234,27 +234,28 @@ class CVController extends Controller
             }
         }
 
+
         $endValidationArray = [
             'first_name' => 'required|alpha|max:30',
             'last_name' => 'required|alpha|max:30',
-            'profile' => 'required|min:25'
+            'profile' => 'required|min:25|max:500'
         ];
 
-        $educationNameValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_name/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
+        $educationNameValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_name/i", 'required|max:255|regex:/(^[a-zA-Z0-9 ]+$)+/i');
         $endValidationArray = array_merge($endValidationArray, $educationNameValidationArray);
         $educationDurationValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_duration/i", ['required', 'regex:/^([a-z]|[A-Z])+ [0-9]{4}(( [-–—] (([a-z]|[A-Z])+ [0-9]{4}))| [-–—] Present)?$/i']);
         $endValidationArray = array_merge($endValidationArray, $educationDurationValidationArray);
         $educationDescriptionValidationArray = $this->createValidationArray($request->request, "/education_[0-9]+_description/i", 'required|min:13');
         $endValidationArray = array_merge($endValidationArray, $educationDescriptionValidationArray);
 
-        $keyProgrammingLanguageNameArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_name/i", 'required');
+        $keyProgrammingLanguageNameArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_name/i", 'required|max:255');
         $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageNameArray);
         $keyProgrammingLanguageDurationArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_duration/i", ['required', 'regex:/^([a-z]|[A-Z])+ [0-9]{4}(( [-–—] (([a-z]|[A-Z])+ [0-9]{4}))| [-–—] Present)?$/']);
         $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageDurationArray);
         $keyProgrammingLanguageDescriptionValidationArray = $this->createValidationArray($request->request, "/key_programming_language_[0-9]+_description/i", 'required|min:13');
         $endValidationArray = array_merge($endValidationArray, $keyProgrammingLanguageDescriptionValidationArray);
 
-        $urlLinkTitleValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_title/i", 'required|regex:/(^[a-zA-Z0-9 ]+$)+/i');
+        $urlLinkTitleValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_title/i", 'required|max:255|regex:/(^[a-zA-Z0-9 ]+$)+/i');
         $endValidationArray = array_merge($endValidationArray, $urlLinkTitleValidationArray);
         $urlLinkUrlValidationArray = $this->createValidationArray($request->request, "/url_link_[0-9]+_url/i", 'required|url');
         $endValidationArray = array_merge($endValidationArray, $urlLinkUrlValidationArray);
@@ -277,7 +278,6 @@ class CVController extends Controller
         } catch (QueryException $exception) {
             return back()->with('error', 'Sorry. There was a problem updating the CV – try again.');
         }
-
 
         return redirect()->route('update.cv')->with('success', 'Success! The CV has been updated.');
     }
