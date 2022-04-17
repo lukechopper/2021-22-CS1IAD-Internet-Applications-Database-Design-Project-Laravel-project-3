@@ -48,6 +48,7 @@ $(function(){
         $('#cv_container').html(htmlString);
     }
 
+    let justRecordedBlankSearch = false;
     function searchInputEventListener(){
 
         let searchString =$('#cv_search_input').val();
@@ -63,9 +64,11 @@ $(function(){
         if(!searchString){
             //Search is completely empty so don't send an ajax request
             $('#cv_container').html(originalCVContainerHTML);
+            justRecordedBlankSearch = true;
             return;
         }
 
+        justRecordedBlankSearch = false;
 
         $.ajaxSetup({
             headers: {
@@ -82,6 +85,7 @@ $(function(){
             },
             success: function(response){
                 //Found CVS, so print them to the HTML document
+                if(justRecordedBlankSearch) return;
                 if(response.foundCVS.length){
                     printFoundCVSToDocument(response.foundCVS);
                     return;
@@ -91,7 +95,7 @@ $(function(){
             error: function(err){
                 setTimeout(function(){
                     searchInputEventListener();
-                }, 1000);
+                }, 250);
             }
         });
     }
