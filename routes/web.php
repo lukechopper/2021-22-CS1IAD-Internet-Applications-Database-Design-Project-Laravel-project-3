@@ -24,15 +24,15 @@ Route::get('/signup', [UserController::class, 'accessSignup'])->name('signup');
 
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::post('/register', [UserController::class, 'signup'])->name('register');
+Route::post('/register', [UserController::class, 'signup'])->name('register')->middleware('guest');
 
-Route::post('/create-account', [UserController::class, 'login'])->name('createAccount');
+Route::post('/create-account', [UserController::class, 'login'])->name('createAccount')->middleware('guest');
 
 Route::get('/create-cv', [CVController::class, 'tryToAccessCreateCV'])->name('create.cv')->middleware('auth');
 
-Route::post('/create-cv', [CVController::class, 'createCV'])->name('post.create.cv');
+Route::post('/create-cv', [CVController::class, 'createCV'])->name('post.create.cv')->middleware('auth');;
 
-Route::put('/update-cv', [CVController::class, 'updateCV'])->name('put.update.cv');
+Route::put('/update-cv', [CVController::class, 'updateCV'])->name('put.update.cv')->middleware('auth');
 
 Route::get('/update-cv', [CVController::class, 'accessUpdateCV'])->name('update.cv')->middleware('auth');
 
@@ -44,8 +44,12 @@ Route::get('/request-to-change-password', function(){
     return view('requestToChangePassword');
 })->name('requestToChangePassword')->middleware('guest');
 
-Route::post('/forgot-password', [NewPasswordController::class, 'forgotPassword'])->name('forgotPassword');
+Route::post('/forgot-password', [NewPasswordController::class, 'forgotPassword'])->name('forgotPassword')->middleware('guest');
+
+Route::post('/reset-password', [NewPasswordController::class, 'resetPassword'])->name('resetPassword')->middleware('guest');
+
+Route::get('/reset-password', [NewPasswordController::class, 'resetPasswordView'])->name('resetPasswordView')->middleware('guest');
 
 Route::any('/{any}', function(){
-    return view('welcome');
+    return redirect()->route('home');
 })->where('any', '.*');

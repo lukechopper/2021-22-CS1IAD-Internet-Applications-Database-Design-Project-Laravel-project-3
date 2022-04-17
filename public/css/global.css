@@ -88,21 +88,36 @@ button, input, select, textarea {
 .centre-container.centre-container--signup_form{
     min-height: 950px;
 }
+.centre-container.centre-container__request_to_change_password{
+    min-height: 650px;
+}
+.centre-container.centre-container--reset_password{
+    min-height: 760px;
+}
+.centre-container.centre-container__info_box{
+    padding: 0 20px;
+    min-height: 490px;
+}
 @media(max-width: 700px){
+    .centre-container.centre-container__info_box{
+        padding: 0 20px;
+        min-height: 350px;
+    }
     .centre-container.centre-container--login_form{
         min-height: 640px;
     }
     .centre-container.centre-container--signup_form{
         min-height: 850px;
     }
+    .centre-container.centre-container__request_to_change_password{
+        min-height: 525px;
+    }
+    .centre-container.centre-container--reset_password{
+        min-height: 660px;
+    }
 }
-.centre-container.centre-container__info_box{
-    padding: 0 20px;
-    min-height: 490px;
-}
-.centre-container.centre-container__request_to_change_password{
-    min-height: 650px;
-}
+
+
 
 /* HEADER CONTENT BEGINS */
 #header{
