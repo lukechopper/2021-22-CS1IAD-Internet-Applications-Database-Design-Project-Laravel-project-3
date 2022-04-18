@@ -51,6 +51,8 @@ $(function(){
     let justRecordedBlankSearch = false;
     function searchInputEventListener(){
 
+        if(areNoCVs) return;
+
         let searchString =$('#cv_search_input').val();
 
         let regularExpressionForNameSearch = new RegExp(/[!"`'#%£&,:;<>=@{}~\$\(\)\*\+\/\\\?\[\]\^\|]|[0-9]|\s+/, 'g');

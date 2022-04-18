@@ -16,6 +16,8 @@
         let searchCVRoute = "{{route('searchCV')}}";
         let normalViewCVRoute = "{{route('viewCV',0)}}";
         let csfrToken = "{{csrf_token()}}";
+
+        let areNoCVs = false;
     </script>
     <h1 class="title title--cv_collection">CV Collection</h1>
     <div class="container container--search">
@@ -29,6 +31,7 @@
     </div>
 
     <div class="container container--cv" id="cv_container">
+        @if(count($cvs))
         @for($i=0;$i < count($cvs); $i++) <!-- SCRIPT TO SORT OUT STYLING FOR CV LIST ITEM -->
             @php
                 $baseClass = 'cv__list_item_container';
@@ -53,6 +56,12 @@
                 </div>
             </div>
             @endfor
+        @else
+        <div class="cv__sorry_no_matches_msg">There are no CVs at the moment.</div>
+        <script type="text/javascript">
+            areNoCVs = true;
+        </script>
+        @endif
     </div>
     <!-- Welcome SCRIPT -->
     <script src="{{asset('public/js/welcome.js')}}"></script>
