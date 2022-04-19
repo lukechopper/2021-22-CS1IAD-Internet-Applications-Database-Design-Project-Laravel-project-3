@@ -54,6 +54,8 @@ $(function(){
         $('#cv_container').html(htmlString);
     }
 
+    let setTimeoutForSearchCV = null;
+
     let justRecordedBlankSearch = true;
     function searchInputEventListener(){
 
@@ -91,7 +93,11 @@ $(function(){
                 if(justRecordedBlankSearch) return;
                 if(response.foundCVS.length){
                     printFoundCVSToDocument(response.foundCVS);
+                    resetIntersectionObserverForDynamicCV(response.foundCVS.length);
                     return;
+                }
+                if(setTimeoutForSearchCV){
+                    clearTimeout(setTimeoutForSearchCV);
                 }
                 $('#cv_container').html('<div class="cv__sorry_no_matches_msg">Sorry. Nothing matched your search.</div>');
             },
@@ -114,6 +120,13 @@ $(function(){
         }
         numOfCVsRendered = numOfOriginalCVS;
     }setNumberOfCVsRendered();
+    function setNumberOfCVsRenderedForSearch(lengthOfFoundCVs){
+        if(lengthOfFoundCVs > 12){
+            numOfCVsRendered = 12;
+            return;
+        }
+        numOfCVsRendered = lengthOfFoundCVs;
+    }
 
     let intersectionObserverOptions = {
         root: null,
@@ -160,6 +173,63 @@ $(function(){
         addMoreBlankCVs();
     }
 
+    function addMoreDynamicCVsIntersectionObserver(){
+        if(removeIntersectionObserverWhenNeeded()){
+            return;
+        }
+
+        isIntersecting = true;
+
+        let searchString =$('#cv_search_input').val();
+
+        let regularExpressionForNameSearch = new RegExp(/[!"`'#%£&,:;<>=@{}~\$\(\)\*\+\/\\\?\[\]\^\|]|[0-9]|\s+/, 'g');
+        let regularExpressionLanguageSearch = new RegExp(/\s+/, 'g');
+        if(searchConfigOption === 'Name'){
+            searchString = searchString.replace(regularExpressionForNameSearch, '');
+        }else{
+            searchString = searchString.replace(regularExpressionLanguageSearch, '');
+        }
+
+        function addMoreDynamicCVs(){
+            $.ajax({
+                url: searchCVRoute,
+                type: 'GET',
+                dataType : 'json',
+                data:{
+                    searchConfigOption: searchConfigOption,
+                    search: searchString,
+                    skip: numOfCVsRendered
+                },
+                success: function(response){
+                    //Found CVS, so print them to the HTML document
+                    isIntersecting = false;
+                    if(justRecordedBlankSearch) return;
+                    if(!response.foundCVS.length){
+                        setTimeoutForSearchCV = setTimeout(function(){
+                            $('#cv__list_item_bottom_container').remove();
+                        }, 500);
+                    }
+                    $.each(response.foundCVS, function(index, newCV){
+                        let linkForItem = normalViewCVRoute.replace(/([0-9]+)$/i, newCV.id);
+                $('#cv__list_item_bottom_container').before('<div class="'+sortCVListItemClass(numOfCVsRendered)+'"> \
+                    <div class="cv__list_item"> \
+                        <h2 class="cv__name">'+newCV.name+'</h2> \
+                        <a href="'+linkForItem+'" class="cv__view_cv_btn">View CV</a> \
+                    </div> \
+                </div>');
+                numOfCVsRendered++;
+                    });
+                },
+                error: function(err){
+                    setTimeout(function(){
+                        addMoreDynamicCVs();
+                    }, 250);
+                }
+            });
+        }
+        addMoreDynamicCVs();
+    }
+
     let intersectionObserverCallback = function(entries, observer){
         if(numOfOriginalCVS <= 12) return;
         $.each(entries, function(index, entry){
@@ -168,8 +238,9 @@ $(function(){
                     setTimeout(function(){
                         if(justRecordedBlankSearch){
                             addMoreCVsBecauseReachedIntersectionObserver();
+                        }else{
+                            addMoreDynamicCVsIntersectionObserver();
                         }
-
                     }, 500);
                 }
             }
@@ -199,6 +270,14 @@ $(function(){
         setTimeout(function(){
             removeIntersectionObserverWhenNeeded();
         }, 1000);
+    }
+
+    function resetIntersectionObserverForDynamicCV(numberOfFoundCVs){
+        if(!$('#cv__list_item_bottom_container').length){
+            $('#cv_container').append('<div class="cv__list_item_bottom_container" id="cv__list_item_bottom_container"><div class="loader"></div></div>');
+            observer.observe($('#cv__list_item_bottom_container')[0]);
+        }
+        setNumberOfCVsRenderedForSearch(numberOfFoundCVs);
     }
 
 });

@@ -328,12 +328,12 @@ class CVController extends Controller
         }
 
         $requestSkip = $request->get('skip');
-        $numOfCVsToSkip = 12;
+        $numOfCVsToSkip = 0;
         if(!empty($requestSkip)){
             $numOfCVsToSkip = intval($request->get('skip'));
         }
 
-        $allCVS = CV::take(12)->skip($numOfCVsToSkip)->get();
+        $allCVS = CV::all();
         $foundCVS = array();
 
         $requestSearchConfigOption = $request->get('searchConfigOption');
@@ -367,7 +367,7 @@ class CVController extends Controller
 
         return response()->json([
             'search' => $requestSearch,
-            'foundCVS' => $foundCVS
+            'foundCVS' => array_slice($foundCVS, $numOfCVsToSkip, 12)
         ]);
     }
 }
