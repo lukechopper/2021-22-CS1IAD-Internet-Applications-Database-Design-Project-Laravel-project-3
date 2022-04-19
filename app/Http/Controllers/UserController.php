@@ -72,7 +72,7 @@ class UserController extends Controller
             'password' => 'required'
         ]);
         if(!auth()->attempt($request->only('email', 'password'), $request->remember)){
-            return back()->with('error', 'true');
+            return back()->with('error', 'true')->with('email', $request->email);
         }
         return back()->with('success', 'true');
     }

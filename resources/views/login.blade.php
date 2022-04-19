@@ -38,7 +38,7 @@
             @error('email')
             <div class="error_msg">{{$message}}</div>
             @enderror
-            <input type="text" name="email" id="form_email" class="form__input" value="{{old('email')}}" />
+            <input type="text" name="email" id="form_email" class="form__input" value="@if(!empty(old('email'))){{old('email')}}@else{{session('email')}}@endif" />
             <div class="form__label_container">
                 <label for="form_password">Password:</label>
                 <div class="form__sub_label form__sub_label--show_hide"><i class="fa-solid fa-eye"></i>Show</div>
