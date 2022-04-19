@@ -9,17 +9,19 @@ $(function(){
         }
     });
 
-    $('#cv_configure_search_category').on('input', function(){
-        if($(this).val() !== 'Name'){
-            $(this).addClass('search__configure_search_category--large_width');
+    function searchCategoryEventHandler(){
+        if($('#cv_configure_search_category').val() !== 'Name'){
+            $('#cv_configure_search_category').addClass('search__configure_search_category--large_width');
             searchConfigOption = 'Programming Language';
         }else{
-            $(this).removeClass('search__configure_search_category--large_width');
+            $('#cv_configure_search_category').removeClass('search__configure_search_category--large_width');
             searchConfigOption = 'Name';
         }
 
         searchInputEventListener();
-    });
+    }
+
+    $('#cv_configure_search_category').on('input', searchCategoryEventHandler);
 
     function sortCVListItemClass(id){
         let baseClass = 'cv__list_item_container';
@@ -282,5 +284,9 @@ $(function(){
         }
         setNumberOfCVsRenderedForSearch(numberOfFoundCVs);
     }
+
+
+    //Call the search category event handler so that Google Chrome does not freak out when we click the back button to go back to the homepage when a search was previously just made on it
+    searchCategoryEventHandler();
 
 });
