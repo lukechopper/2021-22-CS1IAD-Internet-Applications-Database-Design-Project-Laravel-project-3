@@ -299,7 +299,25 @@ class CVController extends Controller
 
     public function returnHomeView()
     {
-        return view('welcome', ['cvs' => CV::all()]);
+        $numberOfCVs = CV::select(CV::raw("count(id) as numOfCVs"))->get();
+        $actualNumberOfCVs = 0;
+        if($numberOfCVs->count()){
+            $actualNumberOfCVs = $numberOfCVs[0]['numOfCVs'];
+        }
+        return view('welcome', ['cvs' => CV::take(12)->get(), 'actualNumberOfCVs' => $actualNumberOfCVs]);
+    }
+
+    public function getMoreBlankCVs(Request $request){
+        if (!$request->ajax()) {
+            return redirect()->route('home');
+        }
+        $skipNumber = intval($request->get('skip'));
+
+        $newCVs = CV::take(12)->skip($skipNumber)->get();
+
+        return response()->json([
+            'newCVs' => $newCVs
+        ]);
     }
 
     public function searchCV(Request $request)
@@ -309,7 +327,13 @@ class CVController extends Controller
             return redirect()->route('home');
         }
 
-        $allCVS = CV::all();
+        $requestSkip = $request->get('skip');
+        $numOfCVsToSkip = 12;
+        if(!empty($requestSkip)){
+            $numOfCVsToSkip = intval($request->get('skip'));
+        }
+
+        $allCVS = CV::take(12)->skip($numOfCVsToSkip)->get();
         $foundCVS = array();
 
         $requestSearchConfigOption = $request->get('searchConfigOption');

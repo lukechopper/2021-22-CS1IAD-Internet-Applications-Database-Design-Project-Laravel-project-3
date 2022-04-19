@@ -40,6 +40,8 @@ Route::get('/cv/{id}', [CVController::class, 'viewCV'])->name('viewCV');
 
 Route::get('/search-cv', [CVController::class, 'searchCV'])->name('searchCV');
 
+Route::get('/get-more-blank-cv', [CVController::class, 'getMoreBlankCVs'])->name('getMoreBlankCVs');
+
 Route::get('/request-to-change-password', function(){
     return view('requestToChangePassword');
 })->name('requestToChangePassword')->middleware('guest');

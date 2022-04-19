@@ -14,8 +14,11 @@
     <!-- SCRIPT needed to store the route where an AJAX request will be sent from the search input box -->
     <script type="text/javascript">
         let searchCVRoute = "{{route('searchCV')}}";
+        let getMoreBlankCVRoute = "{{route('getMoreBlankCVs')}}";
         let normalViewCVRoute = "{{route('viewCV',0)}}";
         let csfrToken = "{{csrf_token()}}";
+
+        let numOfOriginalCVS = {{$actualNumberOfCVs}};
 
         let areNoCVs = false;
     </script>
@@ -34,20 +37,20 @@
         @if(count($cvs))
         @for($i=0;$i < count($cvs); $i++) <!-- SCRIPT TO SORT OUT STYLING FOR CV LIST ITEM -->
             @php
-                $baseClass = 'cv__list_item_container';
-                if(fmod(floatval($i), 3.0) === 0.0){
-                    $baseClass .= ' cv__list_item_container--left';
-                }else if(fmod(floatval($i), 3.0) === 1.0){
-                    $baseClass .= ' cv__list_item_container--middle';
-                }else if(fmod(floatval($i), 3.0) === 2.0){
-                    $baseClass .= ' cv__list_item_container--right';
-                }
+            $baseClass = 'cv__list_item_container';
+            if(fmod(floatval($i), 3.0) === 0.0){
+            $baseClass .= ' cv__list_item_container--left';
+            }else if(fmod(floatval($i), 3.0) === 1.0){
+            $baseClass .= ' cv__list_item_container--middle';
+            }else if(fmod(floatval($i), 3.0) === 2.0){
+            $baseClass .= ' cv__list_item_container--right';
+            }
 
-               if(fmod(floatval($i), 2.0) === 0.0){
-                    $baseClass .= ' cv__list_item_container--medium_left';
-               }else if(fmod(floatval($i), 2.0) === 1.0){
-                    $baseClass .= ' cv__list_item_container--medium_right';
-               }
+            if(fmod(floatval($i), 2.0) === 0.0){
+            $baseClass .= ' cv__list_item_container--medium_left';
+            }else if(fmod(floatval($i), 2.0) === 1.0){
+            $baseClass .= ' cv__list_item_container--medium_right';
+            }
             @endphp
             <div class="{{$baseClass}}">
                 <div class="cv__list_item">
@@ -56,13 +59,16 @@
                 </div>
             </div>
             @endfor
-        @else
-        <div class="cv__sorry_no_matches_msg">There are no CVs at the moment.</div>
-        <script type="text/javascript">
-            areNoCVs = true;
-        </script>
-        @endif
+            <div class="cv__list_item_bottom_container" id="cv__list_item_bottom_container"><div class="loader"></div></div>
+            @else
+            <div class="cv__sorry_no_matches_msg">There are no CVs at the moment.</div>
+            <script type="text/javascript">
+                areNoCVs = true;
+            </script>
+            @endif
     </div>
+    <!-- Intersection Observer Polyfill -->
+    <script src="{{asset('public/js/intersectionObserver/intersection-observer.js')}}"></script>
     <!-- Welcome SCRIPT -->
     <script src="{{asset('public/js/welcome.js')}}"></script>
 </body>
