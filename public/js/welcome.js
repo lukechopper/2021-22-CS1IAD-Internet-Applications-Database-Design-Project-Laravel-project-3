@@ -232,7 +232,7 @@ $(function(){
     }
 
     let intersectionObserverCallback = function(entries, observer){
-        if(numOfOriginalCVS <= 12) return;
+        //if(numOfOriginalCVS <= 12) return;
         $.each(entries, function(index, entry){
             if(entry.target.id === 'cv__list_item_bottom_container'){
                 if(entry.isIntersecting && !isIntersecting){
