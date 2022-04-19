@@ -73,6 +73,10 @@
     </section>
     @endif
     <footer></footer>
+    <!-- SCRIPT TAG -->
+    <script type="text/javascript">
+        localStorage.setItem('edit_cv_done_yet', 'no');
+    </script>
 </body>
 
 </html>
