@@ -97,8 +97,8 @@ class CVController extends Controller
             $aSubArrayWithinTheReturnArray[0] = $eachSeperateLineArray[0];
             $aSubArrayWithinTheReturnArray[1] = $eachSeperateLineArray[1];
             $lastValueOfSubArray = $value;
-            $lastValueOfSubArray = preg_replace("/" . $eachSeperateLineArray[0] . "/i", '', $lastValueOfSubArray, 1);
-            $lastValueOfSubArray = preg_replace("/" . $eachSeperateLineArray[1] . "/i", '', $lastValueOfSubArray, 1);
+            $lastValueOfSubArray = preg_replace("/" . preg_quote($eachSeperateLineArray[0]) . "/i", '', $lastValueOfSubArray, 1);
+            $lastValueOfSubArray = preg_replace("/" . preg_quote($eachSeperateLineArray[1]) . "/i", '', $lastValueOfSubArray, 1);
             $aSubArrayWithinTheReturnArray[2] = trim($lastValueOfSubArray);
 
             $returnArray[] = $aSubArrayWithinTheReturnArray;
@@ -357,7 +357,8 @@ class CVController extends Controller
                         continue;
                     }
                     $programmingNameWithoutSpaces = preg_replace("/\s+/i", '', $formattedProgrammingInfoSection[0]);
-                    if (preg_match("/^(.*" . $requestSearch . ".*)$/i", $programmingNameWithoutSpaces)) {
+                    //Format request search so that special characters are treated as such and not parts of the regular expression
+                    if (preg_match("/^(.*" . preg_quote($requestSearch) . ".*)$/i", $programmingNameWithoutSpaces)) {
                         $foundCVS[] = $cv;
                         $alreadyMatchedThisCV = true;
                     }

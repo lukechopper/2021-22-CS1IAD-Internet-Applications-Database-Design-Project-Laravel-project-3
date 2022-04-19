@@ -55,6 +55,7 @@ $(function(){
     }
 
     let setTimeoutForSearchCV = null;
+    let intersectionObserverSetTimeoutForSearch = null;
 
     let justRecordedBlankSearch = true;
     function searchInputEventListener(){
@@ -235,7 +236,7 @@ $(function(){
         $.each(entries, function(index, entry){
             if(entry.target.id === 'cv__list_item_bottom_container'){
                 if(entry.isIntersecting && !isIntersecting){
-                    setTimeout(function(){
+                    intersectionObserverSetTimeoutForSearch = setTimeout(function(){
                         if(justRecordedBlankSearch){
                             addMoreCVsBecauseReachedIntersectionObserver();
                         }else{
@@ -264,6 +265,7 @@ $(function(){
 
 
     function resetIntersectionObserver(){
+        clearTimeout(intersectionObserverSetTimeoutForSearch);
         $('#cv_container').html(originalCVContainerHTML);
         observer.observe($('#cv__list_item_bottom_container')[0]);
         setNumberOfCVsRendered();
@@ -274,6 +276,7 @@ $(function(){
 
     function resetIntersectionObserverForDynamicCV(numberOfFoundCVs){
         if(!$('#cv__list_item_bottom_container').length){
+            clearTimeout(intersectionObserverSetTimeoutForSearch);
             $('#cv_container').append('<div class="cv__list_item_bottom_container" id="cv__list_item_bottom_container"><div class="loader"></div></div>');
             observer.observe($('#cv__list_item_bottom_container')[0]);
         }
